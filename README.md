@@ -17,6 +17,10 @@
 - **Windows 保持 bash**：预设内置 Git Bash executor（自动探测 GIT_BASH → Program Files\Git → LOCALAPPDATA\Git → PATH），`bash` 工具不再在 Windows 上被禁用。
 - **Windows 持久 PowerShell**：对齐 `dsh-v0.1.1-rc.1` 的 minimal 预设，`pwsh` 使用持久 PTY 会话，cwd、变量、函数跨调用保留。
 
+## 兼容性
+
+在 `@deepseek-ai/dsh@0.1.1-rc.2` 上验证（2026-08-26）。遵循 cordis 组合包补丁模型（`cordis.patch.yml` + `dsh.bundle.patch`），运行时不 import 任何 `@deepseek-ai/*` 内部模块。
+
 ## 安装
 
 1. 把本包加入 web profile（`package.json`）：
@@ -34,6 +38,15 @@
    `$DSH_HOME/.agent-presets/ptc-minimal`。
 
 4. 新建会话时选择 **极简 PTC 模式**。
+
+## 卸载
+
+```bash
+dsh plugin --profile web remove dsh-minimal-ptc
+```
+
+卸载后重启 Web 服务。如需彻底清理，可再手动删除自己 profile `cordis.patch.yml` 中覆盖的插件行。
+
 
 ## Windows Git Bash 配置
 

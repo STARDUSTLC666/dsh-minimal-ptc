@@ -11,6 +11,10 @@
 - **Git Bash on Windows**: ships a preset-local Git Bash executor (GIT_BASH -> Program Files\Git -> LOCALAPPDATA\Git -> PATH). The bash tool is no longer disabled on Windows.
 - **Persistent PowerShell on Windows**: mirrors the `dsh-v0.1.1-rc.1` minimal preset; `pwsh` runs as a persistent PTY session, so cwd, variables, and functions survive across calls.
 
+## Compatibility
+
+Verified against `@deepseek-ai/dsh@0.1.1-rc.2` on 2026-08-26. Built for the cordis patch-bundle plugin model (`cordis.patch.yml` + `dsh.bundle.patch`). No runtime imports of `@deepseek-ai/*` internals.
+
 ## Installation
 
 1. Add this package to a web profile (`package.json`):
@@ -27,6 +31,15 @@
 3. Restart the web profile process. The host row materializes the bundled preset into `$DSH_HOME/.agent-presets/ptc-minimal`.
 
 4. Select **Minimal PTC** when starting a new session.
+
+## Uninstall
+
+```bash
+dsh plugin --profile web remove dsh-minimal-ptc
+```
+
+Then restart the web service. To clean up fully, also remove the plugin entry from your profile `cordis.patch.yml` if you overrode it.
+
 
 ## Capabilities
 
