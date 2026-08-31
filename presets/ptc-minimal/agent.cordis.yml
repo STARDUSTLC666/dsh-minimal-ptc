@@ -1,14 +1,14 @@
-# The `ptc-minimal` agent preset: the `code` (PTC 模式) capabilities with the
+# The `ptc-minimal` agent preset: the `ptc` (PTC 模式) capabilities with the
 # `minimal` (极简模式) prompt.
 #
-# Everything in `code` is here unchanged — full standard capabilities plus the
-# Code Mode tool presentation (`tool-presentation` with `mode: code`), where the
+# Everything in `ptc` is here unchanged — full standard capabilities plus the
+# PTC tool presentation (`tool-presentation` with `mode: ptc`), where the
 # model composes a TypeScript program against a generated SDK and `run_code`
 # executes it. What differs is the persona row, taken verbatim from `minimal`:
 # a fixed one-line persona marked `complete: true` with
 # `includeRuntimeContext: false`, so global identity, Web orientation, tool
 # guidance, and later assembly listeners cannot add prompt text, and runtime
-# context snapshots are suppressed. The `agent-instructions` row from `code` is
+# context snapshots are suppressed. The `agent-instructions` row from `ptc` is
 # dropped for the same reason — its workspace instruction baselines would add
 # user-role text the minimal prompt policy excludes.
 #
@@ -271,10 +271,10 @@
 
 # ── presentation ────────────────────────────────────────────────────────────
 
-# Code Mode for this agent alone. The row waits for the host's `codeRuntime`
+# PTC for this agent alone. The row waits for the host's `codeRuntime`
 # rather than assuming it: a deployment that composes no TypeScript runtime
 # fails this preset at mount, naming this id, instead of at the first request.
 - id: tool-presentation
   name: '@deepseek-ai/dsh-agent-tool-presentation'
   config:
-    mode: code
+    mode: ptc
