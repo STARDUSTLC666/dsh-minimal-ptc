@@ -1,5 +1,7 @@
 # dsh-minimal-ptc
 
+![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
+
 > Minimal prompt x full PTC capabilities — a cleaner coding agent.
 > Installing gives you a new agent mode: **Minimal PTC**, with Git Bash and persistent PowerShell on Windows, aligned with `dsh-v0.1.2-alpha.2`.
 

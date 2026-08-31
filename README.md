@@ -1,5 +1,7 @@
 # dsh-minimal-ptc
 
+![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
+
 > 极简提示词 × PTC 全能力 —— 一个更"干净"的编码 Agent。
 > 安装即获得新的 Agent 模式：**极简 PTC 模式**；Windows 自动启用 Git Bash 与持久 PowerShell（对齐 dsh-v0.1.2-alpha.2）。
 
