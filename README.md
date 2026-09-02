@@ -3,25 +3,25 @@
 ![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
 
 > 极简提示词 × PTC 全能力 —— 一个更"干净"的编码 Agent。
-> 安装即获得新的 Agent 模式：**极简 PTC 模式**；Windows 自动启用 Git Bash 与持久 PowerShell（对齐 dsh-v0.1.2-alpha.2）。
+> 安装即获得新的 Agent 模式：**极简 PTC 模式**；Windows 自动启用 Git Bash 与持久 PowerShell（对齐 dsh-v0.1.2-alpha.4）。
 
 ## 卖点
 
 - **对齐 RL 训练**：系统提示词只有一句 `You are a helpful software engineer assistant.`，
   贴近 RL 微调时的简洁指令分布，没有长提示词带来的格式偏置与上下文噪音，
   让模型按训练时的节奏干活。
-- **工具完整**：完整继承 PTC 模式的全部工具 —— PTC SDK 多步编排、
-  文件读写与检索、Shell、Skills、计划、目标、子代理、工作流，一个不少。
+- **PTC 工具面完整**：提供 `run_code` SDK 多步编排、文件读写与检索、Shell、
+  Skills、计划、目标、子代理、Ralph 与网页搜索/抓取；按 alpha.4 默认隐藏通用 workflow 工具。
 - **We / Let's 思维链**：PTC SDK 把"想"和"做"装进一个 TypeScript 程序，
   多步操作先编排、再一次执行。这与 DeepSeek 官方跑分环境（Project2 V4.1b）中
   Minimal 高分轨迹一致：99/96 的两跑以 `we` / `let's` 为主，而不是
   Standard/PTC 常见的 `let me` / `I` 长块。
 - **Windows 保持 bash**：预设内置 Git Bash executor（自动探测 GIT_BASH → Program Files\Git → LOCALAPPDATA\Git → PATH），`bash` 工具不再在 Windows 上被禁用。
-- **Windows 持久 PowerShell**：对齐 `dsh-v0.1.2-alpha.2` 的 minimal 预设，`pwsh` 使用持久 PTY 会话，cwd、变量、函数跨调用保留。
+- **Windows 持久 PowerShell**：对齐 `dsh-v0.1.2-alpha.4` 的 minimal 预设，`pwsh` 使用持久 PTY 会话，cwd、变量、函数跨调用保留。
 
 ## 兼容性
 
-在 `@deepseek-ai/dsh@0.1.2-alpha.2` 上验证（2026-08-31）。遵循 cordis 组合包补丁模型（`cordis.patch.yml` + `dsh.bundle.patch`），运行时不 import 任何 `@deepseek-ai/*` 内部模块。
+在 `@deepseek-ai/dsh@0.1.2-alpha.4` 源码模式下验证（2026-09-02）。遵循 cordis 组合包补丁模型（`cordis.patch.yml` + `dsh.bundle.patch`），运行时不 import 任何 `@deepseek-ai/*` 内部模块。
 
 ## 安装
 

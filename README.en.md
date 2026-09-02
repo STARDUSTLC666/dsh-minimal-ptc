@@ -3,19 +3,19 @@
 ![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
 
 > Minimal prompt x full PTC capabilities — a cleaner coding agent.
-> Installing gives you a new agent mode: **Minimal PTC**, with Git Bash and persistent PowerShell on Windows, aligned with `dsh-v0.1.2-alpha.2`.
+> Installing gives you a new agent mode: **Minimal PTC**, with Git Bash and persistent PowerShell on Windows, aligned with `dsh-v0.1.2-alpha.4`.
 
 ## Highlights
 
 - **RL-aligned**: the whole system prompt is one sentence — `You are a helpful software engineer assistant.` — close to the compact instruction distribution used during RL fine-tuning, without long-prompt format bias or context noise.
-- **Complete toolset**: inherits the full PTC toolset — PTC SDK multi-step orchestration, files and search, Shell, Skills, plan mode, goals, subagents, and workflows.
+- **Complete PTC surface**: provides `run_code` SDK orchestration, files and search, Shell, Skills, plan mode, goals, subagents, Ralph, and web search/fetch; the general-purpose workflow tool stays hidden as in alpha.4.
 - **We / Let's reasoning**: the PTC SDK packs thinking and doing into one TypeScript program, orchestrating multi-step operations before executing them once. This matches the high-scoring Minimal trajectory in DeepSeek's official Project2 V4.1b runs (99/96), where reasoning is dominated by `we` / `let's` instead of the standard-like `let me` / `I` blocks seen at 91/92.
 - **Git Bash on Windows**: ships a preset-local Git Bash executor (GIT_BASH -> Program Files\Git -> LOCALAPPDATA\Git -> PATH). The bash tool is no longer disabled on Windows.
-- **Persistent PowerShell on Windows**: mirrors the `dsh-v0.1.2-alpha.2` minimal preset; `pwsh` runs as a persistent PTY session, so cwd, variables, and functions survive across calls.
+- **Persistent PowerShell on Windows**: mirrors the `dsh-v0.1.2-alpha.4` minimal preset; `pwsh` runs as a persistent PTY session, so cwd, variables, and functions survive across calls.
 
 ## Compatibility
 
-Verified against `@deepseek-ai/dsh@0.1.2-alpha.2` on 2026-08-31. Built for the cordis patch-bundle plugin model (`cordis.patch.yml` + `dsh.bundle.patch`). No runtime imports of `@deepseek-ai/*` internals.
+Verified against source-run `@deepseek-ai/dsh@0.1.2-alpha.4` on 2026-09-02. Built for the cordis patch-bundle plugin model (`cordis.patch.yml` + `dsh.bundle.patch`). No runtime imports of `@deepseek-ai/*` internals.
 
 ## Installation
 
@@ -45,8 +45,8 @@ Then restart the web service. To clean up fully, also remove the plugin entry fr
 
 ## Capabilities
 
-- Web search is enabled via `tool-web`; arbitrary page fetch is disabled by default (`fetch: false`).
-- Subagents are enabled: `subagent`, `subagent_fork`, `subagent_control`, workflows, and Ralph.
+- Web search and page fetch are enabled via `tool-web` (`fetch: true`).
+- Subagents and Ralph are enabled; the general-purpose workflow tool remains hidden in PTC mode.
 - `subagent_codex` and `subagent_claude_code` providers are disabled by default; remove their `disabled: true` lines to expose them.
 
 ## Windows Git Bash configuration
