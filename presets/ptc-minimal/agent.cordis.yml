@@ -244,6 +244,9 @@
 
     - id: tool-workflow
       name: '@deepseek-ai/dsh-tool-workflow'
+      # Keep the engine above for `ralph`, but do not publish a second
+      # model-authored orchestration surface beside `run_code` in PTC mode.
+      disabled: true
 
     - id: tool-ralph
       name: '@deepseek-ai/dsh-tool-ralph'
@@ -266,7 +269,7 @@
 - id: tool-web
   name: '@deepseek-ai/dsh-tool-web'
   config:
-    fetch: false
+    fetch: true
     searchTimeoutMs: 60000
 
 # ── presentation ────────────────────────────────────────────────────────────

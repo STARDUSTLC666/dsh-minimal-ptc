@@ -36,3 +36,10 @@ test('ships a ptc-minimal preset composition', () => {
   assert.match(composition, /You are a helpful software engineer assistant/)
   assert.match(metadata, /name: 极简 PTC 模式/)
 })
+
+test('matches the dsh-v0.1.2-alpha.4 PTC tool surface', () => {
+  const composition = readFileSync(new URL('../presets/ptc-minimal/agent.cordis.yml', import.meta.url), 'utf8')
+  assert.match(composition, /- id: tool-workflow\n      name: '@deepseek-ai\/dsh-tool-workflow'[\s\S]*?      disabled: true/)
+  assert.match(composition, /- id: tool-ralph\n      name: '@deepseek-ai\/dsh-tool-ralph'/)
+  assert.match(composition, /- id: tool-web\n  name: '@deepseek-ai\/dsh-tool-web'\n  config:\n    fetch: true/)
+})
