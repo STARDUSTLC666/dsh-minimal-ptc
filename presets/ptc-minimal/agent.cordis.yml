@@ -19,10 +19,11 @@
 # ── identity ────────────────────────────────────────────────────────────────
 
 # The persona is the complete system prompt (minimal-mode prompt policy).
+# dsh 0.1.3 renamed the persona config field `text` to `prefix` (required).
 - id: persona
   name: '@deepseek-ai/dsh-persona'
   config:
-    text: You are a helpful software engineer assistant.
+    prefix: You are a helpful software engineer assistant.
     complete: true
     includeRuntimeContext: false
 

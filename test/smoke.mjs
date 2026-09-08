@@ -33,7 +33,9 @@ test('ships a ptc-minimal preset composition', () => {
   const metadata = readFileSync(new URL('../presets/ptc-minimal/preset.yml', import.meta.url), 'utf8')
   assert.match(composition, /id: persona/)
   assert.match(composition, /id: tool-presentation/)
-  assert.match(composition, /You are a helpful software engineer assistant/)
+  // dsh 0.1.3 起 persona 字段名是 prefix（旧名 text 会导致新建会话静默失败）
+  assert.match(composition, /prefix: You are a helpful software engineer assistant/)
+  assert.doesNotMatch(composition, /^\s+text: /m)
   assert.match(metadata, /name: 极简 PTC 模式/)
 })
 
