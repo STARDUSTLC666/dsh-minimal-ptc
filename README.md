@@ -3,7 +3,7 @@
 ![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
 
 > 极简提示词 × PTC 全能力 —— 一个更"干净"的编码 Agent。
-> 安装即获得新的 Agent 模式：**极简 PTC 模式**；Windows 自动启用 Git Bash 与持久 PowerShell（对齐 dsh-v0.1.2-alpha.4）。
+> 安装即获得新的 Agent 模式：**极简 PTC 模式**；Windows 自动启用 Git Bash 与持久 PowerShell（对齐 dsh-v0.1.5-rc.1）。
 
 ## 卖点
 
@@ -17,11 +17,13 @@
   Minimal 高分轨迹一致：99/96 的两跑以 `we` / `let's` 为主，而不是
   Standard/PTC 常见的 `let me` / `I` 长块。
 - **Windows 保持 bash**：预设内置 Git Bash executor（自动探测 GIT_BASH → Program Files\Git → LOCALAPPDATA\Git → PATH），`bash` 工具不再在 Windows 上被禁用。
-- **Windows 持久 PowerShell**：对齐 `dsh-v0.1.2-alpha.4` 的 minimal 预设，`pwsh` 使用持久 PTY 会话，cwd、变量、函数跨调用保留。
+- **Windows 持久 PowerShell**：对齐 `dsh-v0.1.5-rc.1` 的 minimal 预设，`pwsh` 使用持久 PTY 会话，cwd、变量、函数跨调用保留。
 
 ## 兼容性
 
-在 `@deepseek-ai/dsh@0.1.3-alpha.2` 源码模式下验证（2026-09-08；0.4.4 适配 0.1.3 的 persona `text`→`prefix` 字段改名，旧版 dsh 请用 0.4.3）。遵循 cordis 组合包补丁模型（`cordis.patch.yml` + `dsh.bundle.patch`），运行时不 import 任何 `@deepseek-ai/*` 内部模块。
+已在官方 `@deepseek-ai/dsh@0.1.5-rc.1`、Node `24.16.0` 上验证（2026-09-11）：18 个组件与 Modlens 同载，工具 schema、技能注册及离线只读调用检查通过。采用 `cordis.patch.yml` + `dsh.bundle.patch` 组合包模型。Node 要求与该版本 Harness 一致：22.19 及以上的 22.x，或 24 及以上。外部服务的实际业务操作需按各组件配置单独验证。
+
+另已在真实 agent 中挂载极简 PTC 预设并组装模型工具：模型入口为 `run_code`，安装的插件工具和 Windows Git Bash 均可用。沿用 0.1.3 起的 persona `prefix` 字段；更旧的 Harness 请使用插件 0.4.3。0.4.5 起，预设更新标记自动读取包版本，避免升级后仍保留旧预设。
 
 ## 安装
 

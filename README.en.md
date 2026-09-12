@@ -3,7 +3,7 @@
 ![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
 
 > Minimal prompt x full PTC capabilities — a cleaner coding agent.
-> Installing gives you a new agent mode: **Minimal PTC**, with Git Bash and persistent PowerShell on Windows, aligned with `dsh-v0.1.2-alpha.4`.
+> Installing gives you a new agent mode: **Minimal PTC**, with Git Bash and persistent PowerShell on Windows, aligned with `dsh-v0.1.5-rc.1`.
 
 ## Highlights
 
@@ -11,11 +11,13 @@
 - **Complete PTC surface**: provides `run_code` SDK orchestration, files and search, Shell, Skills, plan mode, goals, subagents, Ralph, and web search/fetch; the general-purpose workflow tool stays hidden as in alpha.4.
 - **We / Let's reasoning**: the PTC SDK packs thinking and doing into one TypeScript program, orchestrating multi-step operations before executing them once. This matches the high-scoring Minimal trajectory in DeepSeek's official Project2 V4.1b runs (99/96), where reasoning is dominated by `we` / `let's` instead of the standard-like `let me` / `I` blocks seen at 91/92.
 - **Git Bash on Windows**: ships a preset-local Git Bash executor (GIT_BASH -> Program Files\Git -> LOCALAPPDATA\Git -> PATH). The bash tool is no longer disabled on Windows.
-- **Persistent PowerShell on Windows**: mirrors the `dsh-v0.1.2-alpha.4` minimal preset; `pwsh` runs as a persistent PTY session, so cwd, variables, and functions survive across calls.
+- **Persistent PowerShell on Windows**: mirrors the `dsh-v0.1.5-rc.1` minimal preset; `pwsh` runs as a persistent PTY session, so cwd, variables, and functions survive across calls.
 
 ## Compatibility
 
-Verified against source-run `@deepseek-ai/dsh@0.1.2-alpha.4` on 2026-09-02. Built for the cordis patch-bundle plugin model (`cordis.patch.yml` + `dsh.bundle.patch`). No runtime imports of `@deepseek-ai/*` internals.
+Verified with official `@deepseek-ai/dsh@0.1.5-rc.1` and Node `24.16.0` on 2026-09-11: all 18 components load alongside Modlens, with passing tool-schema, skill-registration and offline read-only invocation checks. Uses the `cordis.patch.yml` + `dsh.bundle.patch` bundle model. Node requirements match this Harness release: 22.19 or later within 22.x, or 24 or later. Live external-service workflows require separate configuration and validation.
+
+The Minimal PTC preset also mounts in a real agent and assembles `run_code` as the model-facing tool while retaining installed plugin tools and Windows Git Bash. Uses the persona `prefix` field introduced in Harness 0.1.3; use plugin 0.4.3 with older Harness versions. Since 0.4.5, the preset update marker reads the package version automatically so upgrades cannot leave an older preset because of a stale hard-coded version.
 
 ## Installation
 
