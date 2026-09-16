@@ -3,7 +3,7 @@
 ![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
 
 > 极简提示词 × PTC 全能力 —— 一个更"干净"的编码 Agent。
-> 安装即获得新的 Agent 模式：**极简 PTC 模式**；Windows 自动启用 Git Bash 与持久 PowerShell（对齐 dsh-v0.1.5-rc.1）。
+> 安装即获得新的 Agent 模式：**极简 PTC 模式**；Windows 自动启用 Git Bash 与持久 PowerShell，兼容 Harness 0.1.5-rc.2 和 0.1.6-alpha.1。
 
 ## 卖点
 
@@ -21,7 +21,9 @@
 
 ## 兼容性
 
-已在官方 `@deepseek-ai/dsh@0.1.5-rc.1`、Node `24.16.0` 上验证（2026-09-11）：18 个组件与 Modlens 同载，工具 schema、技能注册及离线只读调用检查通过。采用 `cordis.patch.yml` + `dsh.bundle.patch` 组合包模型。Node 要求与该版本 Harness 一致：22.19 及以上的 22.x，或 24 及以上。外部服务的实际业务操作需按各组件配置单独验证。
+已在官方源码构建的 Harness `0.1.5-rc.2` 和 `0.1.6-alpha.1` 上验证（2026-09-16）：18 个组件与 ModLens 同载，工具 schema、技能注册、离线只读调用、真实 Agent 预设挂载及 `run_code` 调用插件工具通过。采用 `cordis.patch.yml` + `dsh.bundle.patch` 组合包模型。Node 要求为 22.19 及以上的 22.x，或 24 及以上。外部服务的实际业务操作需按各组件配置单独验证。
+
+0.4.6 起，插件等待宿主启动完成后选择工作流运行时：0.1.6 使用 `workflow-ptc`，0.1.5 保留 `workflow-worker-thread`。受管理的预设会在插件版本或运行时种类变化时刷新；同版本、同运行时的本地修改以及无版本标记的自建预设保持不变。
 
 另已在真实 agent 中挂载极简 PTC 预设并组装模型工具：模型入口为 `run_code`，安装的插件工具和 Windows Git Bash 均可用。沿用 0.1.3 起的 persona `prefix` 字段；更旧的 Harness 请使用插件 0.4.3。0.4.5 起，预设更新标记自动读取包版本，避免升级后仍保留旧预设。
 
@@ -81,10 +83,8 @@ dsh-minimal-ptc/
 
 ## 说明
 
-- 物化策略：目标目录不存在 → 写入全部文件并留版本标记；版本标记低于当前
-  版本 → 刷新；目录存在但无标记（用户自建）→ 不覆盖。
-- 升级插件：改 `version` 并同步 `lib/index.js` 里的 `VERSION` 常量即可刷新
-  用户根目录里的预设文件。
+- 物化策略：目标目录不存在时写入全部文件；插件版本或宿主运行时种类变化时刷新受管理文件；无标记的自建预设不覆盖。
+- 升级插件只需更新 `package.json` 的版本；预设标记自动读取该版本。
 
 ## 许可证
 

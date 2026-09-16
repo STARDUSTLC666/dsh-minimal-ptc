@@ -3,8 +3,16 @@ import assert from 'node:assert/strict'
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { apply } from '../lib/index.js'
+import { apply as mount } from '../lib/index.js'
 import pkg from '../package.json' with { type: 'json' }
+
+function apply() {
+  mount({
+    get: () => undefined,
+    appReady: { onReady(listener) { listener(); return () => {} } },
+    effect: callback => callback(),
+  })
+}
 
 test('materialization honors version marker and user-created directories', () => {
   const dir = mkdtempSync(join(tmpdir(), 'dsh-minimal-ptc-materialize-'))

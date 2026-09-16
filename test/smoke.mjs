@@ -16,7 +16,11 @@ test('materializes all preset files including the git-bash executor', () => {
   const previous = process.env.DSH_HOME
   process.env.DSH_HOME = dir
   try {
-    plugin.apply({})
+    plugin.apply({
+      get: () => undefined,
+      appReady: { onReady(listener) { listener(); return () => {} } },
+      effect: callback => callback(),
+    })
     const preset = join(dir, '.agent-presets', 'ptc-minimal')
     assert.ok(existsSync(join(preset, 'agent.cordis.yml')))
     assert.ok(existsSync(join(preset, 'preset.yml')))

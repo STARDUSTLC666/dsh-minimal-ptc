@@ -3,7 +3,7 @@
 ![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
 
 > Minimal prompt x full PTC capabilities — a cleaner coding agent.
-> Installing gives you a new agent mode: **Minimal PTC**, with Git Bash and persistent PowerShell on Windows, aligned with `dsh-v0.1.5-rc.1`.
+> Installing gives you a new agent mode: **Minimal PTC**, with Git Bash and persistent PowerShell on Windows, compatible with Harness 0.1.5-rc.2 and 0.1.6-alpha.1.
 
 ## Highlights
 
@@ -15,7 +15,9 @@
 
 ## Compatibility
 
-Verified with official `@deepseek-ai/dsh@0.1.5-rc.1` and Node `24.16.0` on 2026-09-11: all 18 components load alongside Modlens, with passing tool-schema, skill-registration and offline read-only invocation checks. Uses the `cordis.patch.yml` + `dsh.bundle.patch` bundle model. Node requirements match this Harness release: 22.19 or later within 22.x, or 24 or later. Live external-service workflows require separate configuration and validation.
+Verified with official source builds of Harness `0.1.5-rc.2` and `0.1.6-alpha.1` on 2026-09-16: all 18 components load alongside ModLens, with passing tool schemas, skill registration, offline read-only calls, real Agent preset mounting, and plugin calls through `run_code`. Uses the `cordis.patch.yml` + `dsh.bundle.patch` bundle model. Node requirements are 22.19 or later within 22.x, or 24 or later. Live external-service workflows require separate configuration and validation.
+
+Since 0.4.6, the plugin selects the workflow provider after host startup: `workflow-ptc` on 0.1.6 and `workflow-worker-thread` on 0.1.5. Managed presets refresh when the plugin version or host runtime family changes. Local edits on the same version and runtime, and user-created presets without a marker, remain untouched.
 
 The Minimal PTC preset also mounts in a real agent and assembles `run_code` as the model-facing tool while retaining installed plugin tools and Windows Git Bash. Uses the persona `prefix` field introduced in Harness 0.1.3; use plugin 0.4.3 with older Harness versions. Since 0.4.5, the preset update marker reads the package version automatically so upgrades cannot leave an older preset because of a stale hard-coded version.
 
@@ -69,9 +71,9 @@ Detection order: `GIT_BASH` -> `Program Files\\Git` -> `Program Files (x86)\\Git
 ## Materialization policy
 
 - No target directory -> write all preset files and a version marker.
-- Marker version lower than the plugin version -> refresh from the bundled files.
+- Plugin version or host runtime family changes -> refresh managed files.
 - Directory exists without a marker (treated as user-created) -> leave it untouched.
-- Upgrading: bump `version` in `package.json` and the `VERSION` constant in `lib/index.js`.
+- Upgrading: bump `version` in `package.json`; the marker reads it automatically.
 
 ## License
 
