@@ -23,7 +23,7 @@
 
 已在官方源码构建的 Harness `0.1.5-rc.2` 和 `0.1.6-alpha.1` 上验证（2026-09-16）：18 个组件与 ModLens 同载，工具 schema、技能注册、离线只读调用、真实 Agent 预设挂载及 `run_code` 调用插件工具通过。采用 `cordis.patch.yml` + `dsh.bundle.patch` 组合包模型。Node 要求为 22.19 及以上的 22.x，或 24 及以上。外部服务的实际业务操作需按各组件配置单独验证。
 
-0.4.6 起，插件等待宿主启动完成后选择工作流运行时：0.1.6 使用 `workflow-ptc`，0.1.5 保留 `workflow-worker-thread`。受管理的预设会在插件版本或运行时种类变化时刷新；同版本、同运行时的本地修改以及无版本标记的自建预设保持不变。
+0.4.6 起，插件等待宿主启动完成后选择工作流运行时：0.1.6 使用 `workflow-ptc`，0.1.5 保留 `workflow-worker-thread`。受管理的预设会在插件版本或运行时种类变化时刷新；同版本、同运行时的本地修改以及无版本标记的自建预设保持不变。0.4.7 起预设补齐官方 0.1.6 `ptc` 的 `present` / `command-goal` / `tool-plugin-manager`（默认关闭）行与 subagent 的 `modelSelectionSettings`，并新增启动健康检查（见下文故障排查）。
 
 另已在真实 agent 中挂载极简 PTC 预设并组装模型工具：模型入口为 `run_code`，安装的插件工具和 Windows Git Bash 均可用。沿用 0.1.3 起的 persona `prefix` 字段；更旧的 Harness 请使用插件 0.4.3。0.4.5 起，预设更新标记自动读取包版本，避免升级后仍保留旧预设。
 
@@ -44,6 +44,29 @@
    `$DSH_HOME/.agent-presets/ptc-minimal`。
 
 4. 新建会话时选择 **极简 PTC 模式**。
+
+## 故障排查：`Cannot read properties of undefined (reading 'prepare')`
+
+每次工具调用（含 `run_code`）都以这个错误失败、且会话在挂载期一切正常时，根因是 **dsh-tools 的调度器键（一个 Symbol）在进程内出现了两个身份**。两个已确认的触发路径：
+
+1. **profile 里多装了一份核心包**：某个第三方插件把 `@deepseek-ai/*` 写进了 `dependencies`（应为 `peerDependencies`）、tarball 安装拖入传递副本，或旧 `node_modules` 残留。检查：
+
+   ```bash
+   # 任一命令有输出即为中招（应为空）
+   ls ~/.dsh/profiles/*/node_modules/@deepseek-ai 2>/dev/null
+   ```
+
+   修复：把该 profile `node_modules` 下的 `@deepseek-ai` 目录移走（或整改插件依赖后重装），重启 dsh。
+
+2. **0.1.6-alpha 宿主自身的双构建产物**：`@deepseek-ai/dsh-tools` 的 exports 把 `./types`、`./presentation` 子路径指向第二套编译输出（`lib/types/*.js`），与打包产物 `lib/index.js` 并存时调度器键同样分裂——即使没有装任何多余副本也会中招。根治办法是把 `packages/core/tools/src/index.ts` 里的
+
+   ```ts
+   Symbol('@deepseek-ai/dsh-tools.scheduler')  →  Symbol.for('@deepseek-ai/dsh-tools.scheduler')
+   ```
+
+   `Symbol.for` 走全局符号注册表，跨模块实例恒等，两类触发路径同时免疫。
+
+**本插件自 0.4.7 起在启动时自动体检**：发现 profile 内核心包副本、或宿主仍使用模块本地 Symbol 键（未打上述补丁）时，会在日志里给出对应警告与修复指引（只警告，不阻断启动）。
 
 ## 卸载
 

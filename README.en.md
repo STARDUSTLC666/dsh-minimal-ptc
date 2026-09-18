@@ -17,7 +17,7 @@
 
 Verified with official source builds of Harness `0.1.5-rc.2` and `0.1.6-alpha.1` on 2026-09-16: all 18 components load alongside ModLens, with passing tool schemas, skill registration, offline read-only calls, real Agent preset mounting, and plugin calls through `run_code`. Uses the `cordis.patch.yml` + `dsh.bundle.patch` bundle model. Node requirements are 22.19 or later within 22.x, or 24 or later. Live external-service workflows require separate configuration and validation.
 
-Since 0.4.6, the plugin selects the workflow provider after host startup: `workflow-ptc` on 0.1.6 and `workflow-worker-thread` on 0.1.5. Managed presets refresh when the plugin version or host runtime family changes. Local edits on the same version and runtime, and user-created presets without a marker, remain untouched.
+Since 0.4.6, the plugin selects the workflow provider after host startup: `workflow-ptc` on 0.1.6 and `workflow-worker-thread` on 0.1.5. Managed presets refresh when the plugin version or host runtime family changes. Local edits on the same version and runtime, and user-created presets without a marker, remain untouched. Since 0.4.7, the preset restores the official 0.1.6 `ptc` rows `present` / `command-goal` / `tool-plugin-manager` (disabled) plus `modelSelectionSettings` on subagent spawn, and a startup health check guards the `reading 'prepare'` failure modes (see Troubleshooting).
 
 The Minimal PTC preset also mounts in a real agent and assembles `run_code` as the model-facing tool while retaining installed plugin tools and Windows Git Bash. Uses the persona `prefix` field introduced in Harness 0.1.3; use plugin 0.4.3 with older Harness versions. Since 0.4.5, the preset update marker reads the package version automatically so upgrades cannot leave an older preset because of a stale hard-coded version.
 
@@ -37,6 +37,29 @@ The Minimal PTC preset also mounts in a real agent and assembles `run_code` as t
 3. Restart the web profile process. The host row materializes the bundled preset into `$DSH_HOME/.agent-presets/ptc-minimal`.
 
 4. Select **Minimal PTC** when starting a new session.
+
+## Troubleshooting: `Cannot read properties of undefined (reading 'prepare')`
+
+When every tool call (including `run_code`) fails with this error while sessions mount fine, the root cause is **two identities of the dsh-tools scheduler key (a Symbol) inside one process**. Two confirmed triggers:
+
+1. **A duplicate core package inside a profile**: a third-party plugin lists `@deepseek-ai/*` under `dependencies` (it belongs in `peerDependencies`), a tarball install drags in transitive copies, or stale `node_modules` linger. Check:
+
+   ```bash
+   # Any output means trouble (should be empty)
+   ls ~/.dsh/profiles/*/node_modules/@deepseek-ai 2>/dev/null
+   ```
+
+   Fix: move the `@deepseek-ai` directory out of that profile's `node_modules` (or fix the offending plugin's dependencies and reinstall), then restart dsh.
+
+2. **The 0.1.6-alpha host's own dual build outputs**: the `@deepseek-ai/dsh-tools` exports map routes `./types` and `./presentation` to a second compiled tree (`lib/types/*.js`) next to the bundle (`lib/index.js`) — the key splits even with zero extra copies. The root fix, in `packages/core/tools/src/index.ts`:
+
+   ```ts
+   Symbol('@deepseek-ai/dsh-tools.scheduler')  →  Symbol.for('@deepseek-ai/dsh-tools.scheduler')
+   ```
+
+   `Symbol.for` uses the global symbol registry, so the key stays identical across module instances and both triggers are disarmed.
+
+**Since 0.4.7 this plugin self-checks at startup**: if a profile holds core-package copies, or the host still uses a module-local Symbol key (unpatched), it logs a warning with the matching remediation. Warnings never block startup.
 
 ## Uninstall
 
