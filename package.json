@@ -1,6 +1,6 @@
 {
   "name": "dsh-minimal-ptc",
-  "version": "0.4.7",
+  "version": "0.5.0",
   "description": "DeepSeek Harness 极简 PTC 预设：简洁提示词、run_code 工具编排、完整插件工具，以及 Windows Git Bash 和持久 PowerShell。",
   "type": "module",
   "main": "lib/index.js",
@@ -9,7 +9,8 @@
       "default": "./lib/index.js"
     },
     "./cordis.patch.yml": "./cordis.patch.yml",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./gitbash-executor": "./presets/ptc-minimal/gitbash-executor.mjs"
   },
   "files": [
     "lib",
@@ -17,11 +18,15 @@
     "cordis.patch.yml",
     "README.md",
     "README.en.md",
-    "LICENSE"
+    "LICENSE",
+    "ptc-minimal.patch.yml"
   ],
   "dsh": {
     "bundle": {
-      "patch": "./cordis.patch.yml"
+      "patch": [
+        "./cordis.patch.yml",
+        "./ptc-minimal.patch.yml"
+      ]
     }
   },
   "keywords": [

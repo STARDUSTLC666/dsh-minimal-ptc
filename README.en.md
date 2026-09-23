@@ -1,65 +1,56 @@
+[中文](README.md)
+
 # dsh-minimal-ptc
 
-![npm](https://img.shields.io/npm/v/dsh-minimal-ptc) ![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc) ![license](https://img.shields.io/github/license/STARDUSTLC666/dsh-minimal-ptc) ![stars](https://img.shields.io/github/stars/STARDUSTLC666/dsh-minimal-ptc?style=social)
+Adds **Minimal PTC** to DeepSeek Harness: a concise system prompt with files, terminals, search, skills and installed plugin tools, orchestrated through `run_code`. Windows includes Git Bash and persistent PowerShell.
 
-> Minimal prompt x full PTC capabilities — a cleaner coding agent.
-> Installing gives you a new agent mode: **Minimal PTC**, with Git Bash and persistent PowerShell on Windows, compatible with Harness 0.1.5-rc.2 and 0.1.6-alpha.1.
+## Install and use
 
-## Highlights
+Version 0.5.0 requires **Harness 0.1.7 or later**. Use `dsh-minimal-ptc@0.4.7` on Harness 0.1.5/0.1.6.
 
-- **RL-aligned**: the whole system prompt is one sentence — `You are a helpful software engineer assistant.` — close to the compact instruction distribution used during RL fine-tuning, without long-prompt format bias or context noise.
-- **Complete PTC surface**: provides `run_code` SDK orchestration, files and search, Shell, Skills, plan mode, goals, subagents, Ralph, and web search/fetch; the general-purpose workflow tool stays hidden as in alpha.4.
-- **We / Let's reasoning**: the PTC SDK packs thinking and doing into one TypeScript program, orchestrating multi-step operations before executing them once. This matches the high-scoring Minimal trajectory in DeepSeek's official Project2 V4.1b runs (99/96), where reasoning is dominated by `we` / `let's` instead of the standard-like `let me` / `I` blocks seen at 91/92.
-- **Git Bash on Windows**: ships a preset-local Git Bash executor (GIT_BASH -> Program Files\Git -> LOCALAPPDATA\Git -> PATH). The bash tool is no longer disabled on Windows.
-- **Persistent PowerShell on Windows**: mirrors the `dsh-v0.1.5-rc.1` minimal preset; `pwsh` runs as a persistent PTY session, so cwd, variables, and functions survive across calls.
+```bash
+dsh plugin --profile web add dsh-minimal-ptc
+```
 
-## Compatibility
+Restart `dsh web`, start a new session and choose **极简 PTC 模式** (Minimal PTC) from the mode picker above the message box. Describe your task normally; no preset directory or YAML editing is required.
 
-Verified with official source builds of Harness `0.1.5-rc.2` and `0.1.6-alpha.1` on 2026-09-16: all 18 components load alongside ModLens, with passing tool schemas, skill registration, offline read-only calls, real Agent preset mounting, and plugin calls through `run_code`. Uses the `cordis.patch.yml` + `dsh.bundle.patch` bundle model. Node requirements are 22.19 or later within 22.x, or 24 or later. Live external-service workflows require separate configuration and validation.
+For example: “Run this project’s tests, find the failures and fix them.” Existing email, calendar and other plugin tools remain available.
 
-Since 0.4.6, the plugin selects the workflow provider after host startup: `workflow-ptc` on 0.1.6 and `workflow-worker-thread` on 0.1.5. Managed presets refresh when the plugin version or host runtime family changes. Local edits on the same version and runtime, and user-created presets without a marker, remain untouched. Since 0.4.7, the preset restores the official 0.1.6 `ptc` rows `present` / `command-goal` / `tool-plugin-manager` (disabled) plus `modelSelectionSettings` on subagent spawn, and a startup health check guards the `reading 'prepare'` failure modes (see Troubleshooting).
+## Changes in 0.5.0
 
-The Minimal PTC preset also mounts in a real agent and assembles `run_code` as the model-facing tool while retaining installed plugin tools and Windows Git Bash. Uses the persona `prefix` field introduced in Harness 0.1.3; use plugin 0.4.3 with older Harness versions. Since 0.4.5, the preset update marker reads the package version automatically so upgrades cannot leave an older preset because of a stale hard-coded version.
+- Registers through the official Harness 0.1.7 declarative Agent preset service, fixing the missing mode after a host upgrade.
+- Installs and updates the preset with the plugin. Existing user content in `.agent-presets/ptc-minimal` is preserved.
+- Checks for conflicting runtime packages without flagging supported helpers such as `schemastery` and `cosmokit`.
+- Uses `workflow-ptc` and retains plugin tools, Git Bash, persistent PowerShell, search, plans, goals and subagents.
 
-## Installation
+## Compatibility and validation
 
-1. Add this package to a web profile (`package.json`):
+Tested on 2026-09-23 with official-source **Harness 0.1.7-alpha.2**, including a local `Symbol.for` tool-scheduler fix. All 18 plugins load together with passing tool contracts and skill registration. The real Web mode picker lists and selects the preset; a real agent mounts it with `run_code` as its model entry point while retaining plugin tools and the shell.
 
-   ```json
-   "dependencies": { "dsh-minimal-ptc": "^0.4.0" },
-   "dsh": { "profile": { "bundles": [..., "dsh-minimal-ptc"] } }
-   ```
+A real `run_code` call to the RSS plugin passed in a sandboxed Windows workspace and again after restart. The fixture owner has full control of the disposable directory so the host can apply sandbox permissions. External mail, databases and other services still require their own valid configuration.
 
-   Local development can use a link: `"dsh-minimal-ptc": "link:E://deepseek//dsh-minimal-ptc"`.
+Requires Node 22.19 or later within 22.x, or 24 or later.
 
-2. Run `pnpm install` in the profile directory.
+## Windows terminals
 
-3. Restart the web profile process. The host row materializes the bundled preset into `$DSH_HOME/.agent-presets/ptc-minimal`.
+A standard Git for Windows installation is detected automatically. For a custom location, set `GIT_BASH` to the full path of `bash.exe` before starting DSH. PowerShell sessions preserve their current directory, variables and functions.
 
-4. Select **Minimal PTC** when starting a new session.
+Developers creating their own preset can use the bundled `ptc-minimal.patch.yml` as a reference; the executor module is `dsh-minimal-ptc/gitbash-executor`.
 
-## Troubleshooting: `Cannot read properties of undefined (reading 'prepare')`
+| Executor option | Default | Purpose |
+| :-- | :-- | :-- |
+| `shellPath` | auto-detected | Git Bash path |
+| `timeoutMs` | 120000 | Per-command timeout in ms |
+| `maxTimeoutMs` | 600000 | Maximum requested timeout |
+| `maxOutputBytes` | 64000 | Output cap per call |
+| `maxSpillBytes` | 67108864 | Output spill-to-disk cap |
+| `graceMs` | 3000 | Grace period after timeout |
 
-When every tool call (including `run_code`) fails with this error while sessions mount fine, the root cause is **two identities of the dsh-tools scheduler key (a Symbol) inside one process**. Two confirmed triggers:
+## Troubleshooting
 
-1. **A duplicate core package inside a profile**: a third-party plugin lists `@deepseek-ai/*` under `dependencies` (it belongs in `peerDependencies`), a tarball install drags in transitive copies, or stale `node_modules` linger. Check:
+If the mode is missing, confirm Harness is 0.1.7 or later and restart after installation. Recreating a retired preset directory will not help: the new host does not discover presets there.
 
-   ```bash
-   # Any output means trouble (should be empty)
-   ls ~/.dsh/profiles/*/node_modules/@deepseek-ai 2>/dev/null
-   ```
-
-   Fix: move the `@deepseek-ai` directory out of that profile's `node_modules` (or fix the offending plugin's dependencies and reinstall), then restart dsh.
-
-2. **The 0.1.6-alpha host's own dual build outputs**: the `@deepseek-ai/dsh-tools` exports map routes `./types` and `./presentation` to a second compiled tree (`lib/types/*.js`) next to the bundle (`lib/index.js`) — the key splits even with zero extra copies. The root fix, in `packages/core/tools/src/index.ts`:
-
-   ```ts
-   Symbol('@deepseek-ai/dsh-tools.scheduler')  →  Symbol.for('@deepseek-ai/dsh-tools.scheduler')
-   ```
-
-   `Symbol.for` uses the global symbol registry, so the key stays identical across module instances and both triggers are disarmed.
-
-**Since 0.4.7 this plugin self-checks at startup**: if a profile holds core-package copies, or the host still uses a module-local Symbol key (unpatched), it logs a warning with the matching remediation. Warnings never block startup.
+If every tool fails with `Cannot read properties of undefined (reading 'prepare')`, check startup logs for duplicate runtime packages. Update the plugin bringing in extra `dsh-tools` / `cordis` copies and reinstall dependencies. Do not remove the entire `@deepseek-ai` directory: public helpers are supported dependencies. Another confirmed cause is the host loading two tool build outputs with a module-local scheduler `Symbol`; source builds can use `Symbol.for('@deepseek-ai/dsh-tools.scheduler')` and rebuild.
 
 ## Uninstall
 
@@ -67,36 +58,7 @@ When every tool call (including `run_code`) fails with this error while sessions
 dsh plugin --profile web remove dsh-minimal-ptc
 ```
 
-Then restart the web service. To clean up fully, also remove the plugin entry from your profile `cordis.patch.yml` if you overrode it.
-
-
-## Capabilities
-
-- Web search and page fetch are enabled via `tool-web` (`fetch: true`).
-- Subagents and Ralph are enabled; the general-purpose workflow tool remains hidden in PTC mode.
-- `subagent_codex` and `subagent_claude_code` providers are disabled by default; remove their `disabled: true` lines to expose them.
-
-## Windows Git Bash configuration
-
-The preset-local Git Bash executor can be overridden in `agent.cordis.yml` under `gitbash-executor`:
-
-| Option | Default | Meaning |
-| :-- | :-- | :-- |
-| `shellPath` | auto-detected | Fixed Git Bash path (e.g. `C:\\Program Files\\Git\\bin\\bash.exe`) |
-| `timeoutMs` | 120000 | Per-command timeout (ms) |
-| `maxTimeoutMs` | 600000 | Maximum timeout a request may ask for |
-| `maxOutputBytes` | 64000 | Per-call output cap |
-| `maxSpillBytes` | 67108864 | Output spill-to-disk cap |
-| `graceMs` | 3000 | Grace period after timeout |
-
-Detection order: `GIT_BASH` -> `Program Files\\Git` -> `Program Files (x86)\\Git` -> `LOCALAPPDATA\\Programs\\Git` -> PATH.
-
-## Materialization policy
-
-- No target directory -> write all preset files and a version marker.
-- Plugin version or host runtime family changes -> refresh managed files.
-- Directory exists without a marker (treated as user-created) -> leave it untouched.
-- Upgrading: bump `version` in `package.json`; the marker reads it automatically.
+Restart the Web service afterward.
 
 ## License
 

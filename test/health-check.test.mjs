@@ -43,6 +43,8 @@ test('findProfileCoreCopies: flags @deepseek-ai copies inside profiles only', ()
     mkdirSync(dup, { recursive: true })
     // A profile with third-party plugins only — must not be flagged.
     mkdirSync(join(home, 'clean', 'node_modules', 'some-plugin'), { recursive: true })
+    mkdirSync(join(home, 'clean', 'node_modules', '@deepseek-ai', 'schemastery'), { recursive: true })
+    mkdirSync(join(home, 'clean', 'node_modules', '@deepseek-ai', 'cosmokit'), { recursive: true })
     // A profile without node_modules at all — must not throw.
     mkdirSync(join(home, 'empty'), { recursive: true })
 

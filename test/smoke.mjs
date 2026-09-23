@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, rmSync, mkdirSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -43,9 +43,31 @@ test('ships a ptc-minimal preset composition', () => {
   assert.match(metadata, /name: 极简 PTC 模式/)
 })
 
+test('0.1.7 registration preserves a retired user-customized preset directory', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'dsh-minimal-ptc-modern-'))
+  const previous = process.env.DSH_HOME
+  process.env.DSH_HOME = dir
+  try {
+    const preset = join(dir, '.agent-presets', 'ptc-minimal')
+    mkdirSync(preset, { recursive: true })
+    writeFileSync(join(preset, 'agent.cordis.yml'), '# user customization\n')
+    plugin.apply({
+      get: key => key === 'agentPresets' ? { register() {} } : undefined,
+      appReady: { onReady(listener) { listener(); return () => {} } },
+      effect: callback => callback(),
+    })
+    assert.equal(readFileSync(join(preset, 'agent.cordis.yml'), 'utf8'), '# user customization\n')
+    assert.equal(existsSync(join(preset, 'preset.yml')), false)
+  } finally {
+    if (previous === undefined) delete process.env.DSH_HOME
+    else process.env.DSH_HOME = previous
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test('matches the dsh-v0.1.2-alpha.4 PTC tool surface', () => {
   const composition = readFileSync(new URL('../presets/ptc-minimal/agent.cordis.yml', import.meta.url), 'utf8')
-  assert.match(composition, /- id: tool-workflow\n      name: '@deepseek-ai\/dsh-tool-workflow'[\s\S]*?      disabled: true/)
-  assert.match(composition, /- id: tool-ralph\n      name: '@deepseek-ai\/dsh-tool-ralph'/)
-  assert.match(composition, /- id: tool-web\n  name: '@deepseek-ai\/dsh-tool-web'\n  config:\n    fetch: true/)
+  assert.match(composition, /- id: tool-workflow\r?\n      name: '@deepseek-ai\/dsh-tool-workflow'[\s\S]*?      disabled: true/)
+  assert.match(composition, /- id: tool-ralph\r?\n      name: '@deepseek-ai\/dsh-tool-ralph'/)
+  assert.match(composition, /- id: tool-web\r?\n  name: '@deepseek-ai\/dsh-tool-web'\r?\n  config:\r?\n    fetch: true/)
 })
