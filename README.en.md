@@ -2,6 +2,12 @@
 
 # dsh-minimal-ptc
 
+## 0.5.1 update (2026-09-27)
+
+Declares the tools service dependency so the startup health check can inspect the tool scheduler on the current Cordis host.
+
+Validation host: Harness 0.1.7-rc.2 built from official sources, retaining the local tool-scheduler fix. Build and automated checks pass; interactive coverage and external-service limits are recorded in this release round.
+
 Adds **Minimal PTC** to DeepSeek Harness: a concise system prompt with files, terminals, search, skills and installed plugin tools, orchestrated through `run_code`. Windows includes Git Bash and persistent PowerShell.
 
 ## Install and use
