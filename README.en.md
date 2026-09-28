@@ -31,7 +31,7 @@ For example: “Run this project’s tests, find the failures and fix them.” E
 
 ## Compatibility and validation
 
-Tested on 2026-09-23 with official-source **Harness 0.1.7-alpha.2**, including a local `Symbol.for` tool-scheduler fix. All 18 plugins load together with passing tool contracts and skill registration. The real Web mode picker lists and selects the preset; a real agent mounts it with `run_code` as its model entry point while retaining plugin tools and the shell.
+Validation host: Harness `0.2.0-rc.1` built from official sources (commit `407e65c8`) with Node `24.16.0` on 2026-09-28. 18 plugin tests pass in an isolated environment (1 skipped); all 18 plugins load together in one host with passing tool contracts and skill registration. The real Web mode picker lists and selects the preset; a real agent mounts it with `run_code` as its model entry point while retaining plugin tools and the shell.
 
 A real `run_code` call to the RSS plugin passed in a sandboxed Windows workspace and again after restart. The fixture owner has full control of the disposable directory so the host can apply sandbox permissions. External mail, databases and other services still require their own valid configuration.
 
