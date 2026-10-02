@@ -1,71 +1,44 @@
-[English](README.en.md)
-
 # dsh-minimal-ptc
 
-## 0.5.1 更新（2026-09-27）
+[English](README.en.md)
 
-补齐 tools 服务依赖声明，让启动健康检查可以在新版 Cordis 宿主中读取工具调度器。
+把官方极简提示词与 PTC 编排组合起来，提供完整插件工具和 Windows 终端适配。
 
-验证宿主：官方源码构建的 Harness `0.2.0-rc.1`（commit `407e65c8`）+ Node `24.16.0`（2026-09-28）。18 项插件测试在隔离环境全部通过；同一个宿主里 18 个插件共同加载，注册 0 个工具，工具 schema 与健康检查契约通过。本轮未启用真实端口与外部服务。
+[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
-给 DeepSeek Harness 添加「极简 PTC 模式」：使用简短的系统提示词，保留文件、终端、搜索、技能与已安装插件，通过 `run_code` 编排多步操作。Windows 支持 Git Bash 和持久 PowerShell。
+## 功能
 
-## 安装和使用
+- 以官方 run_code 入口编排多步工具调用。
+- 保留文件、检索、技能、计划、目标和子代理能力。
+- Windows 提供 Git Bash 与官方持久 PowerShell。
 
-0.5.0 需要 **Harness 0.1.7 及以上**。仍使用 Harness 0.1.5/0.1.6 时，请安装 `dsh-minimal-ptc@0.4.7`。
+## 安装
 
-```bash
-dsh plugin --profile web add dsh-minimal-ptc
-```
-
-重启 `dsh web`，新建会话，在输入框上方的模式列表中选择 **极简 PTC 模式**，然后像平时一样描述任务。无需创建预设目录或修改 YAML。
-
-例如：「检查这个项目的测试，找出失败原因并修复。」已有的邮件、日历等插件也可按原来的方式使用。
-
-## 0.5.0 的变化
-
-- 使用 Harness 0.1.7 官方的声明式 Agent 预设注册方式，修复升级后模式消失的问题。
-- 预设随插件安装和更新；保留用户旧的 `.agent-presets/ptc-minimal` 目录，不覆盖其中的自定义内容。
-- 启动检查只提示会影响工具运行的核心包副本，不再把 `schemastery`、`cosmokit` 等正常依赖误报为冲突。
-- 使用新版 `workflow-ptc`，保留插件工具、Git Bash、持久 PowerShell、搜索、计划、目标与子代理能力。
-
-## 兼容性与验证
-
-验证宿主：官方源码构建的 Harness `0.2.0-rc.1`（commit `407e65c8`）+ Node `24.16.0`（2026-09-28）。18 项插件测试在隔离环境通过（1 项按环境跳过）；同一个宿主里 18 个插件共同加载，工具契约与技能注册通过；极简 PTC 出现在实际网页模式列表中并可选择，真实 Agent 挂载后以 `run_code` 为模型入口，保留插件工具与 Shell。
-
-已在沙箱开启的 Windows 隔离工作区通过 `run_code` 实际调用 RSS 插件，重启后再次通过。测试工作区由当前用户拥有完整管理权限，以便宿主设置沙箱权限；外部邮箱、数据库等业务仍需各插件的有效配置。
-
-Node 要求为 22.19 及以上的 22.x，或 24 及以上。
-
-## Windows 终端
-
-安装常规版 Git for Windows 后会自动找到 Git Bash。若安装在自定义位置，可设置 `GIT_BASH` 为 `bash.exe` 的完整路径，再启动 DSH。PowerShell 会话会保留当前目录、变量和函数。
-
-开发者如需自建预设，可参考包内的 `ptc-minimal.patch.yml`，执行器模块为 `dsh-minimal-ptc/gitbash-executor`。
-
-| 执行器选项 | 默认值 | 作用 |
-| :-- | :-- | :-- |
-| `shellPath` | 自动探测 | 指定 Git Bash 路径 |
-| `timeoutMs` | 120000 | 单次命令超时，毫秒 |
-| `maxTimeoutMs` | 600000 | 允许请求的最长超时 |
-| `maxOutputBytes` | 64000 | 单次输出上限 |
-| `maxSpillBytes` | 67108864 | 输出落盘上限 |
-| `graceMs` | 3000 | 超时后的退出宽限时间 |
-
-## 排错
-
-模式未出现时，先确认 DSH 为 0.1.7 及以上且安装后已重启。不要通过重建旧预设目录解决，新宿主不再从该目录发现预设。
-
-若每个工具都报 `Cannot read properties of undefined (reading 'prepare')`，查看启动日志中的核心包冲突提示。应升级带入额外 `dsh-tools` / `cordis` 副本的插件并重新安装依赖；不要删除整个 `@deepseek-ai` 目录，官方的公共辅助包属于正常依赖。另一个已确认原因是宿主同时加载两份工具构建产物且调度器键使用模块局部 `Symbol`；源码构建可将其改为 `Symbol.for('@deepseek-ai/dsh-tools.scheduler')` 后重新构建。
-
-## 卸载
+桌面版可在「插件」面板按包名 `dsh-minimal-ptc` 安装。已配置 dsh 命令时也可使用：
 
 ```bash
-dsh plugin --profile web remove dsh-minimal-ptc
+dsh plugin --profile desktop add dsh-minimal-ptc
 ```
 
-重启 Web 服务后生效。
+网页版把命令中的 `desktop` 改为 `web`。安装后重启 DSH。
+
+## 开始使用
+
+安装后重启 DSH，新建会话，在模式选择器中选择「极简 PTC 模式」，然后描述任务。
+
+## 依赖与配置
+
+使用官方声明式预设接口。Windows 的 Git Bash 需要 Git for Windows；与官方 PTC 的扩展差异见使用说明。
+
+详细配置、工具参数与排错见[使用说明](docs/USAGE.md)。从源码独立开发时，Node 要求以 [package.json](package.json) 为准。
+
+## 文档
+
+- [使用与排错](docs/USAGE.md)
+- [更新记录](CHANGELOG.md)
+- [验证范围与历史记录](docs/VALIDATION.md)
+- [问题反馈与功能建议](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues)
 
 ## License
 
-MIT
+[MIT](LICENSE)
