@@ -2,6 +2,8 @@
 
 [中文](README.md)
 
+![dsh-minimal-ptc whale girl plugin cover](https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/assets/cover-whale-girl.png)
+
 Combine the official minimal prompt with PTC orchestration, plugin tools and Windows shell support.
 
 [![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc)
