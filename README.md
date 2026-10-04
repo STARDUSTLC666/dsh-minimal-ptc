@@ -6,7 +6,7 @@
 
 把官方极简提示词与 PTC 编排组合起来，提供完整插件工具和 Windows 终端适配。
 
-[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc)
+[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
 ## 功能
 

@@ -6,7 +6,7 @@
 
 Combine the official minimal prompt with PTC orchestration, plugin tools and Windows shell support.
 
-[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://img.shields.io/npm/dm/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc)
+[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
 ## What it does
 
