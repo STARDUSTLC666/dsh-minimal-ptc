@@ -4,6 +4,10 @@
 
 [历史英文记录](docs/CHANGELOG.en.md)
 
+## 0.5.3 (2026-10-05)
+
+- 对齐官方 dsh-v0.2.1-alpha.1 PTC 的定时任务工具与子代理禁止调度规则，保留固定一句提示词、Windows Git Bash 和持久 PowerShell。
+
 ## 0.5.2 (2026-09-28)
 
 - 更新官方 Harness 0.2.0-rc.1 的兼容声明和共同加载验证；运行时代码未变。验证范围见[验证记录](docs/VALIDATION.md)。

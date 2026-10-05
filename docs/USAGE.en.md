@@ -2,6 +2,12 @@
 
 [Overview](../README.en.md) · [Changelog](../CHANGELOG.md) · [Validation](VALIDATION.md)
 
+## Current improvements
+
+The primary minimal PTC agent can use official scheduling tools. Spawn/fork subagents follow official restrictions against creating, listing, updating or deleting schedules. Minimal mode still omits runtime context, time prompts and AGENTS instructions.
+
+Scheduling tools activate only when the host provides its `schedule` service. Older hosts skip this module and retain their existing PTC capabilities; do not install duplicate DSH core packages.
+
 ## Install and use
 
 Version 0.5.x requires **Harness 0.1.7 or later**. The current official comparison baseline is **0.2.0-rc.2**. Use `dsh-minimal-ptc@0.4.7` on Harness 0.1.5/0.1.6.

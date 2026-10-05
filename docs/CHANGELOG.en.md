@@ -4,6 +4,10 @@
 
 These English notes preserve the earlier translations. The main changelog contains the consolidated version history.
 
+## 0.5.3 (2026-10-05)
+
+- Align with dsh-v0.2.1-alpha.1 PTC scheduling tools and subagent scheduling restrictions while preserving the one-line prompt and Windows shells.
+
 ## 0.5.1 (2026-09-27)
 
 Declares the tools service dependency so the startup health check can inspect the tool scheduler on the current Cordis host.
