@@ -6,7 +6,7 @@
 
 The primary minimal PTC agent can use official scheduling tools. Spawn/fork subagents follow official restrictions against creating, listing, updating or deleting schedules. Minimal mode still omits runtime context, time prompts and AGENTS instructions.
 
-Scheduling tools activate only when the host provides its `schedule` service. Older hosts skip this module and retain their existing PTC capabilities; do not install duplicate DSH core packages.
+Scheduling tools wait for the host's `schedule` service to activate, avoiding preset failures during parallel startup. Older hosts skip the official scheduling module and retain their existing PTC capabilities; do not install duplicate DSH core packages.
 
 ## Install and use
 

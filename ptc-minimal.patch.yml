@@ -130,10 +130,9 @@
             name: '@deepseek-ai/dsh-tool-jobs'
 
           - id: tool-schedule
-            name: '@deepseek-ai/dsh-tool-schedule'
-            # Older hosts have no schedule service or module. Disabled rows
-            # are never imported; enable only when the host supplies it.
-            disabled: !!js "!ctx.get('schedule')"
+            # Wait for service activation; do not freeze an early readiness
+            # check into a disabled row while the Host is still booting.
+            name: dsh-minimal-ptc/schedule-tools
 
           # ── skills ──────────────────────────────────────────────────────────────────
 

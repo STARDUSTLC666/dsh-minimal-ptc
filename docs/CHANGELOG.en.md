@@ -4,6 +4,10 @@
 
 These English notes preserve the earlier translations. The main changelog contains the consolidated version history.
 
+## 0.5.4 (2026-10-05)
+
+- Wait for the Host schedule service before importing its official tools. Fixes a parallel startup race that marked the whole preset as failed; hosts without scheduling never import the unavailable module.
+
 ## 0.5.3 (2026-10-05)
 
 - Align with dsh-v0.2.1-alpha.1 PTC scheduling tools and subagent scheduling restrictions while preserving the one-line prompt and Windows shells.

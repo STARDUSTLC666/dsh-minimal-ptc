@@ -120,8 +120,7 @@
   name: '@deepseek-ai/dsh-tool-jobs'
 
 - id: tool-schedule
-  name: '@deepseek-ai/dsh-tool-schedule'
-  disabled: !!js "!ctx.get('schedule')"
+  name: ./schedule-tools.mjs
 
 # ── skills ──────────────────────────────────────────────────────────────────
 

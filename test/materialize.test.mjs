@@ -24,6 +24,7 @@ test('materialization honors version marker and user-created directories', () =>
     apply({})
     assert.equal(readFileSync(marker, 'utf8').trim(), pkg.version)
     assert.ok(existsSync(join(preset, 'agent.cordis.yml')))
+    assert.ok(existsSync(join(preset, 'schedule-tools.mjs')))
 
     // Same version: user edits in the materialized copy are preserved.
     writeFileSync(join(preset, 'agent.cordis.yml'), '# user edit')
