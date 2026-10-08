@@ -8,6 +8,8 @@ Combine the official minimal prompt with PTC orchestration, plugin tools and Win
 
 [![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
+Feedback and contributions are welcome: report [issues](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues) or submit [pull requests](https://github.com/STARDUSTLC666/dsh-minimal-ptc/pulls).
+
 ## What it does
 
 - Use the official run_code entry for multi-step tool calls.
