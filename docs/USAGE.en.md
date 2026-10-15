@@ -6,11 +6,11 @@
 
 The primary minimal PTC agent can use official scheduling tools. Spawn/fork subagents follow official restrictions against creating, listing, updating or deleting schedules. Minimal mode still omits runtime context, time prompts and AGENTS instructions.
 
-Scheduling tools wait for the host's `schedule` service to activate, avoiding preset failures during parallel startup. Older hosts skip the official scheduling module and retain their existing PTC capabilities; do not install duplicate DSH core packages.
+Scheduling tools wait for the host's `schedule` service to activate, avoiding preset failures during parallel startup. Older hosts skip the scheduling module and retain existing PTC capabilities; do not install duplicate core packages. The retired subagent `toolFilter` field is no longer passed. Official scheduling tools reject delegated callers at execution time.
 
 ## Install and use
 
-Version 0.5.x requires **Harness 0.1.7 or later**. The current official comparison baseline is **0.2.0-rc.2**. Use `dsh-minimal-ptc@0.4.7` on Harness 0.1.5/0.1.6.
+Version 0.5.x requires **Harness 0.1.7 or later**. This iteration compares the official **0.2.1-alpha.3** source. Use `dsh-minimal-ptc@0.4.7` on Harness 0.1.5/0.1.6.
 
 ```bash
 dsh plugin --profile web add dsh-minimal-ptc
@@ -22,7 +22,7 @@ For example: “Run this project’s tests, find the failures and fix them.” E
 
 ## Official presets and extensions
 
-The core prompt matches the official Minimal preset. PTC presentation and the `run_code` entry follow the official PTC preset, registered through the host's declarative preset service. Compare [Minimal](https://github.com/deepseek-ai/deepseek-harness/blob/639ed015397290b3745d163aafe02ffee4aa3f84/packages/bundle/web-app/presets/minimal.patch.yml) and [PTC](https://github.com/deepseek-ai/deepseek-harness/blob/639ed015397290b3745d163aafe02ffee4aa3f84/packages/bundle/web-app/presets/ptc.patch.yml).
+The core prompt matches the official Minimal preset. PTC presentation and the `run_code` entry follow the official PTC preset, registered through the host's declarative preset service. Compare [Minimal](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.3/packages/bundle/web-app/presets/minimal.patch.yml) and [PTC](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.3/packages/bundle/web-app/presets/ptc.patch.yml).
 
 The following extensions make its defaults differ from the stock PTC preset:
 
@@ -32,6 +32,20 @@ The following extensions make its defaults differ from the stock PTC preset:
 - Codex, Claude, plugin management and generic `tool-workflow` remain disabled, matching their official defaults.
 
 The host provides tool implementations. The plugin does not bundle a second core runtime or override host approval policy. See [validation records](VALIDATION.md) for the scope of the comparison.
+
+## Optional: retain intermediate Node state
+
+DSH 0.2.1-alpha.3 adds the official `persistent-in-memory` Node execution mode. The default remains `per-call`; this plugin does not automatically change the shared provider.
+
+Copy the bundled `presets/ptc-minimal/persistent-node.patch.yml` to a convenient location and run `dsh --profile web --patch <path>`. Alternatively, save this override as a local YAML file:
+
+```yaml
+- id: ptc-runtime
+  config:
+    executionMode: persistent-in-memory
+```
+
+This configures the host's shared Node provider while retaining independent state for each Agent. Return a final JSON expression rather than top-level `return`. Repeating a `let`/`const` declaration fails; assign to an existing variable or choose a new name. Restarting, switching modes or terminating the runtime clears its state; save important results to files. Image reading, automatic compaction and `/compact` use the host's official implementations.
 
 ## Windows terminals
 

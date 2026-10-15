@@ -1,0 +1,6 @@
+# Optional host-provider configuration for DSH 0.2.1-alpha.3 and newer.
+# Apply with `dsh --profile web --patch <this-file>`; the default remains per-call.
+# This configures the shared Node provider. Each Agent's retained state is isolated.
+- id: ptc-runtime
+  config:
+    executionMode: persistent-in-memory

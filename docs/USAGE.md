@@ -6,11 +6,11 @@
 
 极简 PTC 的主代理现在可使用官方定时任务；spawn / fork 子代理保持官方限制，不可创建、列举、更新或删除任务。极简模式仍不注入运行时上下文、时间提示或 AGENTS 指令。
 
-定时工具等待宿主的 `schedule` 服务激活后启用，避免启动顺序导致模式加载失败。旧版宿主会跳过官方定时模块，继续使用原有 PTC 能力；无需另外安装 DSH 核心包。
+定时工具等待宿主的 `schedule` 服务激活后启用，避免启动顺序导致模式加载失败。旧版宿主会跳过官方定时模块，继续使用原有 PTC 能力；无需另外安装 DSH 核心包。新版已移除子代理 `toolFilter` 参数，本插件不再传入该字段；官方定时工具会在执行入口拒绝委派子代理使用提醒。
 
 ## 安装和使用
 
-0.5.x 需要 **Harness 0.1.7 及以上**，当前官方核对基线为 **0.2.0-rc.2**。仍使用 Harness 0.1.5/0.1.6 时，请安装 `dsh-minimal-ptc@0.4.7`。
+0.5.x 需要 **Harness 0.1.7 及以上**，本次对照 **0.2.1-alpha.3** 的官方源码。仍使用 Harness 0.1.5/0.1.6 时，请安装 `dsh-minimal-ptc@0.4.7`。
 
 ```bash
 dsh plugin --profile web add dsh-minimal-ptc
@@ -22,7 +22,7 @@ dsh plugin --profile web add dsh-minimal-ptc
 
 ## 官方预设与扩展
 
-核心提示词与官方 Minimal 一致，PTC 工具展示与 `run_code` 入口沿用官方 PTC，通过官方声明式预设服务注册。对照源码：[Minimal](https://github.com/deepseek-ai/deepseek-harness/blob/639ed015397290b3745d163aafe02ffee4aa3f84/packages/bundle/web-app/presets/minimal.patch.yml)、[PTC](https://github.com/deepseek-ai/deepseek-harness/blob/639ed015397290b3745d163aafe02ffee4aa3f84/packages/bundle/web-app/presets/ptc.patch.yml)。
+核心提示词与官方 Minimal 一致，PTC 工具展示与 `run_code` 入口沿用官方 PTC，通过官方声明式预设服务注册。对照源码：[Minimal](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.3/packages/bundle/web-app/presets/minimal.patch.yml)、[PTC](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.3/packages/bundle/web-app/presets/ptc.patch.yml)。
 
 本插件保留以下扩展，因此与官方 PTC 的默认开关并非完全相同：
 
@@ -32,6 +32,20 @@ dsh plugin --profile web add dsh-minimal-ptc
 - Codex、Claude、插件管理与通用 `tool-workflow` 的默认开关仍与官方一致，保持关闭。
 
 工具实现由宿主提供，插件不捆绑另一份核心运行时，也不覆盖宿主审批规则。核对范围见[验证记录](VALIDATION.md)。
+
+## 可选：保留 Node 中间变量
+
+DSH 0.2.1-alpha.3 起，官方 Node 执行器可在同一 Agent 的多次 `run_code` 之间保留变量、函数和已导入模块。默认仍是每次独立执行；本插件不会自动切换宿主的执行模式。
+
+需要时，将包内 `presets/ptc-minimal/persistent-node.patch.yml` 复制到方便的位置，执行 `dsh --profile web --patch <该文件路径>`。也可以把以下覆盖配置保存为本机 YAML 文件后使用：
+
+```yaml
+- id: ptc-runtime
+  config:
+    executionMode: persistent-in-memory
+```
+
+此开关作用于宿主共享的 Node provider，每个 Agent 各自保存状态。持久模式用最后一个 JSON 表达式返回结果，不能在顶层使用 `return`；重复声明同名 `let` / `const` 会报错，可改为赋值或使用新变量名。重启、切换执行模式或执行器被终止后状态会清空，重要结果仍应保存到文件。读图、自动压缩和 `/compact` 沿用宿主提供的官方实现。
 
 ## Windows 终端
 

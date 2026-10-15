@@ -217,12 +217,6 @@
         toolName: subagent
         modelSelectionSettings: true
         backgroundMode: continuable
-        toolFilter:
-          deny:
-            - schedule_create
-            - schedule_delete
-            - schedule_list
-            - schedule_update
 
     - id: tool-subagent-fork
       name: '@deepseek-ai/dsh-tool-subagent'
@@ -230,12 +224,6 @@
         provider: fork
         toolName: subagent_fork
         backgroundMode: continuable
-        toolFilter:
-          deny:
-            - schedule_create
-            - schedule_delete
-            - schedule_list
-            - schedule_update
 
     # Product providers are host-plane singletons. Remove `disabled` from
     # either ordinary tool row to expose that product to agents on this preset.
