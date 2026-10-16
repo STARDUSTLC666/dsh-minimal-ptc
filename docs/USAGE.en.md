@@ -10,7 +10,7 @@ Scheduling tools wait for the host's `schedule` service to activate, avoiding pr
 
 ## Install and use
 
-Version 0.5.x requires **Harness 0.1.7 or later**. This iteration compares the official **0.2.1-alpha.3** source. Use `dsh-minimal-ptc@0.4.7` on Harness 0.1.5/0.1.6.
+Version 0.5.x requires **Harness 0.1.7 or later**. The current comparison uses official **0.2.1-alpha.5** source. Use `dsh-minimal-ptc@0.4.7` on Harness 0.1.5/0.1.6.
 
 ```bash
 dsh plugin --profile web add dsh-minimal-ptc
@@ -22,7 +22,9 @@ For example: “Run this project’s tests, find the failures and fix them.” E
 
 ## Official presets and extensions
 
-The core prompt matches the official Minimal preset. PTC presentation and the `run_code` entry follow the official PTC preset, registered through the host's declarative preset service. Compare [Minimal](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.3/packages/bundle/web-app/presets/minimal.patch.yml) and [PTC](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.3/packages/bundle/web-app/presets/ptc.patch.yml).
+The identity keeps the official Minimal sentence and adds the SDK needed to execute PTC programs. The host's official generator renders the currently visible tools, argument types and return types for the active execution mode. Per-call programs can use `return` and `console.log`; persistent programs use the host's REPL instructions. Compare [Minimal](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.5/packages/bundle/web-app/presets/minimal.patch.yml) and [PTC](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.5/packages/bundle/web-app/presets/ptc.patch.yml).
+
+Version 0.5.6 fixes the old complete persona dropping the SDK. The minimal identity and required SDK now form the complete prompt, while unrelated workspace and optional runtime guidance stay excluded. SDK size grows with the enabled tools, so this is larger than the plain one-line Minimal prompt.
 
 The following extensions make its defaults differ from the stock PTC preset:
 

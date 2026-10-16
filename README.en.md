@@ -13,6 +13,7 @@ Feedback and contributions are welcome: report [issues](https://github.com/STARD
 ## What it does
 
 - Use the official run_code entry for multi-step tool calls.
+- Keep the minimal identity and generate the official SDK for the current tools and runtime mode.
 - Keep files, search, skills, plans, goals and subagent tools.
 - Offer Git Bash and the official persistent PowerShell on Windows.
 

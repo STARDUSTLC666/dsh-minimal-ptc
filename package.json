@@ -1,6 +1,6 @@
 {
   "name": "dsh-minimal-ptc",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "把官方极简提示词与 PTC 编排组合起来，提供完整插件工具和 Windows 终端适配。",
   "type": "module",
   "main": "lib/index.js",
@@ -12,6 +12,7 @@
     "./package.json": "./package.json",
     "./gitbash-executor": "./presets/ptc-minimal/gitbash-executor.mjs",
     "./schedule-tools": "./presets/ptc-minimal/schedule-tools.mjs",
+    "./ptc-persona": "./presets/ptc-minimal/ptc-persona.mjs",
     "./persistent-node.patch.yml": "./presets/ptc-minimal/persistent-node.patch.yml"
   },
   "files": [

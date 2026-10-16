@@ -1,2 +1,2 @@
 name: 极简 PTC 模式
-description: 一句固定人格，无运行时上下文与附加指令，保留官方 PTC 的文件、Shell、检索、Skills、计划、目标、定时任务、子代理和工作流能力。Windows 提供持久 PowerShell 与 Git Bash；定时任务仅主代理可用。兼容 Harness 0.1.5 至 0.2.1-alpha.1。
+description: 官方极简人格与动态 PTC 工具说明，不附加工作区和运行时上下文。保留文件、Shell、检索、Skills、计划、目标、定时任务及子代理；Windows 支持 Git Bash 和持久 PowerShell。兼容版本与验证范围见插件说明。
