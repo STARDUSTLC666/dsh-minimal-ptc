@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { apply } from '../presets/ptc-minimal/ptc-persona.mjs'
 
-async function fixture() {
+async function fixture(config) {
   const visible = new Map([['first', { name: 'first', description: 'literal {{not_a_variable}}', parameters: { type: 'object' }, output: { schema: { type: 'number' } } }]])
   let section, suppressed = false, disposed = false
   const calls = [], scope = {}, runtime = { language: 'typescript', programFormat: 'function-body' }
@@ -21,42 +21,27 @@ async function fixture() {
     },
     effect(callback) { ctx.dispose = callback() },
   }
-  await apply(ctx)
+  await apply(ctx, config)
   return { ctx, calls, visible, runtime, scope, get section() { return section }, get suppressed() { return suppressed }, get disposed() { return disposed } }
 }
 
-test('complete minimal prompt retains the Host SDK and literal descriptions', async () => {
-  const host = await fixture(), text = host.section.text({ scope: host.scope })
-  assert.ok(text.startsWith('You are a helpful software engineer assistant.\n'))
-  assert.match(text, /Only run_code may be called directly/)
-  assert.match(text, /first: literal \{\{not_a_variable\}\}/)
-  assert.equal(host.section.complete, true)
+test('minimal identity leaves Host plan, web, ralph and SDK sections composable', async () => {
+  const host = await fixture()
+  assert.equal(host.section.text, 'You are a helpful software engineer assistant.')
+  assert.notEqual(host.section.complete, true)
   assert.equal(host.section.interpolate, false)
   assert.equal(host.suppressed, true)
-  assert.deepEqual(host.calls[0].schemas.map(t => t.name), ['first'])
-  assert.deepEqual(host.calls[0].schemas[0].output, { type: 'number' })
+  assert.equal(host.calls.length, 0, 'the Host renders its own SDK once; persona must not duplicate it')
   host.ctx.dispose(); assert.equal(host.disposed, true)
 })
 
-test('each assembly follows visible tools and the current runtime format', async () => {
-  const host = await fixture()
-  host.section.text({ scope: host.scope })
-  host.visible.delete('first')
-  host.visible.set('second', { name: 'second', description: 'newly enabled', parameters: { type: 'object' }, output: { schema: { type: 'string' } } })
-  host.runtime.programFormat = 'repl'
-  const text = host.section.text({ scope: host.scope })
-  assert.doesNotMatch(text, /first:/)
-  assert.match(text, /second: newly enabled/)
-  assert.equal(host.calls.at(-1).format, 'repl')
-  host.runtime.language = 'python'
-  assert.match(host.section.text({ scope: host.scope }), /second/)
+test('custom identity stays literal and runtime context remains opt-in', async () => {
+  const host = await fixture({ prefix: 'Identity {{literal}}', includeRuntimeContext: true })
+  assert.equal(host.section.text, 'Identity {{literal}}')
+  assert.equal(host.section.interpolate, false)
+  assert.equal(host.suppressed, false)
 })
 
-test('unavailable language or output contracts fail visibly', async () => {
-  const host = await fixture()
-  host.runtime.language = 'unknown'
-  assert.throws(() => host.section.text({ scope: host.scope }), /no Host SDK renderer/)
-  host.runtime.language = 'typescript'
-  host.visible.get('first').output = undefined
-  assert.throws(() => host.section.text({ scope: host.scope }), /missing output schema/)
+test('invalid identity configuration fails visibly', async () => {
+  await assert.rejects(fixture({ prefix: 42 }), /prefix must be a string/)
 })

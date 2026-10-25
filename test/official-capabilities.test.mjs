@@ -11,7 +11,7 @@ const flatten = rows => rows.flatMap(row => [row, ...(row.group ? flatten(row.co
 test('现代与兼容预设保留官方定时能力、子代理限制及极简提示词', () => {
   for (const rows of [read('../ptc-minimal.patch.yml')[0].insert[0].config.plugins, read('../presets/ptc-minimal/agent.cordis.yml')]) {
     const all = flatten(rows), persona = all.find(row => row.id === 'persona')
-    assert.deepEqual(persona.config, { prefix: 'You are a helpful software engineer assistant.', complete: true, includeRuntimeContext: false })
+    assert.deepEqual(persona.config, { prefix: 'You are a helpful software engineer assistant.', includeRuntimeContext: false })
     assert.match(persona.name, /(?:^|\/)ptc-persona(?:\.mjs)?$/)
     for (const id of ['tool-fs','tool-fs-search','tool-jobs','tool-schedule','tool-skill','tool-goal','tool-web','tool-todo','tool-ask-user','tool-presentation','present','tool-subagent-list-agents']) assert.ok(all.some(row => row.id === id && row.disabled !== true), id)
     // alpha.3 rejects toolFilter during mount. Official scheduling tools already

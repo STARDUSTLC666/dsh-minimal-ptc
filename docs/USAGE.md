@@ -10,7 +10,7 @@
 
 ## 安装和使用
 
-0.5.x 需要 **Harness 0.1.7 及以上**，当前对照 **0.2.1-alpha.5** 的官方源码。仍使用 Harness 0.1.5/0.1.6 时，请安装 `dsh-minimal-ptc@0.4.7`。
+0.5.x 需要 **Harness 0.1.7 及以上**，当前对照 **0.2.1-rc.3** 的官方源码。仍使用 Harness 0.1.5/0.1.6 时，请安装 `dsh-minimal-ptc@0.4.7`。
 
 ```bash
 dsh plugin --profile web add dsh-minimal-ptc
@@ -22,9 +22,9 @@ dsh plugin --profile web add dsh-minimal-ptc
 
 ## 官方预设与扩展
 
-人格保留官方 Minimal 的一句身份说明，另附 PTC 执行必需的工具 SDK；通过官方声明式预设服务注册。SDK 从宿主按当前可见工具和执行模式动态生成，包含工具参数和返回类型。默认执行可使用 `return` / `console.log`；持久执行采用宿主的 REPL 指引。对照源码：[Minimal](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.5/packages/bundle/web-app/presets/minimal.patch.yml)、[PTC](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-alpha.5/packages/bundle/web-app/presets/ptc.patch.yml)。
+人格保留官方 Minimal 的一句身份说明，另附 PTC 执行必需的工具 SDK；通过官方声明式预设服务注册。SDK 从宿主按当前可见工具和执行模式动态生成，包含工具参数和返回类型。默认执行可使用 `return` / `console.log`；持久执行采用宿主的 REPL 指引。对照源码：[Minimal](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-rc.3/packages/bundle/web-app/presets/minimal.patch.yml)、[PTC](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.1-rc.3/packages/bundle/web-app/presets/ptc.patch.yml)。
 
-0.5.6 修复了旧的固定完整提示词会覆盖 SDK 的问题。极简人格与必需的 SDK 一起组成完整提示词，其他工作区和运行时指引仍不自动追加。
+0.5.7 由官方提示词组合器追加 SDK 与工具安全说明，不再替换完整提示词。计划模式约束、网页不可信输入和 Ralph 使用条件会正常生效；项目 AGENTS 与可选运行时上下文仍按原来的开关默认关闭。
 
 SDK 大小随启用的工具数量增长，因此会比纯粹一句话的 Minimal 占用更多上下文。保留所需的插件即可缩小工具清单。
 
