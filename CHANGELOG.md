@@ -4,6 +4,12 @@
 
 [历史英文记录](docs/CHANGELOG.en.md)
 
+## 0.6.0 (2026-10-26)
+
+- Add this plugin’s own update controls and independent preferences. Automatic installation stays off until explicitly enabled.
+- Confirm manual installs, preserve local sources and disabled state, pause for tasks or unsaved changes, and use native DSH recovery without forced restarts.
+- Require the public DSH 0.2.1-rc.3 update APIs; Suite components remain managed through Suite.
+
 ## 0.5.7（2026-10-26）
 
 - 移除完整提示词覆盖，保留极简身份并由官方组合器追加工具 SDK、计划约束、网页不可信输入与 Ralph 使用规则。保留工作区 AGENTS 和可选上下文的既有默认开关。

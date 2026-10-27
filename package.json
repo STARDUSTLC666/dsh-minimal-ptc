@@ -1,6 +1,6 @@
 {
   "name": "dsh-minimal-ptc",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "description": "把官方极简提示词与 PTC 编排组合起来，提供完整插件工具和 Windows 终端适配。",
   "type": "module",
   "main": "lib/index.js",
@@ -13,7 +13,8 @@
     "./gitbash-executor": "./presets/ptc-minimal/gitbash-executor.mjs",
     "./schedule-tools": "./presets/ptc-minimal/schedule-tools.mjs",
     "./ptc-persona": "./presets/ptc-minimal/ptc-persona.mjs",
-    "./persistent-node.patch.yml": "./presets/ptc-minimal/persistent-node.patch.yml"
+    "./persistent-node.patch.yml": "./presets/ptc-minimal/persistent-node.patch.yml",
+    "./client": "./lib/update-client.js"
   },
   "files": [
     "lib",
@@ -31,6 +32,14 @@
       "patch": [
         "./cordis.patch.yml",
         "./ptc-minimal.patch.yml"
+      ]
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar"
       ]
     }
   },
@@ -58,13 +67,18 @@
   },
   "homepage": "https://github.com/STARDUSTLC666/dsh-minimal-ptc#readme",
   "engines": {
-    "node": "^22.19.0 || >=24.0.0"
+    "node": "^22.19.0 || >=24.0.0",
+    "dsh": ">=0.2.1-rc.3"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "npm run build && node --test",
+    "build": "node scripts/build-updates.mjs"
   },
   "packageManager": "pnpm@11.7.0",
   "devDependencies": {
     "js-yaml": "4.1.1"
+  },
+  "dependencies": {
+    "@stardustlc/dsh-updates": "0.1.0"
   }
 }
