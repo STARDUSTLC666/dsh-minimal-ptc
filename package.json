@@ -1,6 +1,6 @@
 {
   "name": "dsh-minimal-ptc",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "把官方极简提示词与 PTC 编排组合起来，提供完整插件工具和 Windows 终端适配。",
   "type": "module",
   "main": "lib/index.js",
@@ -79,6 +79,6 @@
     "js-yaml": "4.1.1"
   },
   "dependencies": {
-    "@stardustlc/dsh-updates": "0.1.1"
+    "@stardustlc/dsh-updates": "0.1.2"
   }
 }
