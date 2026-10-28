@@ -4,7 +4,7 @@
 
 ![dsh-minimal-ptc whale girl plugin cover](https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/assets/cover-whale-girl.png)
 
-Combine the official minimal prompt with PTC orchestration, plugin tools and Windows shell support.
+Combine the official minimal prompt style with Python/TypeScript PTC orchestration in a DSH preset. Keeps plugin tools and Windows shell support while preserving host guidance for plan mode, untrusted web content and tool use.
 
 [![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 

@@ -4,7 +4,7 @@
 
 ![dsh-minimal-ptc 鲸鱼娘插件封面](https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/assets/cover-whale-girl.png)
 
-把官方极简提示词与 PTC 编排组合起来，提供完整插件工具和 Windows 终端适配。
+把官方极简提示风格与 Python / TypeScript PTC 工具编排组合成 DSH 预设。提供插件工具和 Windows 终端适配，并保留宿主的计划模式、网页不可信内容与工具使用约束。
 
 [![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
