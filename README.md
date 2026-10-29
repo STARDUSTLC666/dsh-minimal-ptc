@@ -6,7 +6,9 @@
 
 把官方极简提示风格与 Python / TypeScript PTC 工具编排组合成 DSH 预设。提供插件工具和 Windows 终端适配，并保留宿主的计划模式、网页不可信内容与工具使用约束。
 
-[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
+[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc) [![total downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-total-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
+
+[下载统计说明](https://github.com/STARDUSTLC666/dsh-suite/blob/npm-downloads/README.md)
 
 欢迎使用，遇到问题或有改进建议，请提交 [issues](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues) 和 [PR](https://github.com/STARDUSTLC666/dsh-minimal-ptc/pulls)。
 
@@ -29,7 +31,10 @@ dsh plugin --profile desktop add dsh-minimal-ptc
 
 ## 开始使用
 
-安装后重启 DSH，新建会话，在模式选择器中选择「极简 PTC 模式」，然后描述任务。
+1. 安装到实际使用的 DSH profile，重启后创建新会话。
+2. 在会话模式选择器中选择“极简 PTC 模式”。
+3. 描述任务和目标工作区，由助手按预设使用 TypeScript / Python 编排工具；按需要准备对应运行时。
+4. 核对工具结果和实际文件；需要其他能力时切换模式，不必额外安装整套 Suite。
 
 ## 依赖与配置
 

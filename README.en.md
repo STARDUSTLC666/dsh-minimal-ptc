@@ -6,7 +6,9 @@
 
 Combine the official minimal prompt style with Python/TypeScript PTC orchestration in a DSH preset. Keeps plugin tools and Windows shell support while preserving host guidance for plan mode, untrusted web content and tool use.
 
-[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
+[![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc) [![total downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-total-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
+
+[Download statistics](https://github.com/STARDUSTLC666/dsh-suite/blob/npm-downloads/README.md)
 
 Feedback and contributions are welcome: report [issues](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues) or submit [pull requests](https://github.com/STARDUSTLC666/dsh-minimal-ptc/pulls).
 
@@ -29,7 +31,10 @@ For the web version, replace `desktop` with `web`. Restart DSH after installatio
 
 ## Start using it
 
-Restart DSH, create a session and select “Minimal PTC” from the mode selector before describing your task.
+1. Install in the DSH profile you use, restart it and create a new session.
+2. Select Minimal PTC mode in the session mode selector.
+3. Describe the task and workspace; the assistant uses TypeScript/Python tool orchestration. Prepare the selected runtime when needed.
+4. Check tool results and actual files. Switch modes for other capabilities; the full Suite is optional.
 
 ## Requirements and configuration
 
