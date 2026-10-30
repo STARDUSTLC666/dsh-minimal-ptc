@@ -1,33 +1,35 @@
-# dsh-minimal-ptc
+**简体中文** · [English](README.en.md)
 
-[English](README.en.md)
+# Minimal PTC
 
-![dsh-minimal-ptc 鲸鱼娘插件封面](https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/assets/cover-whale-girl.png)
-
-把官方极简提示风格与 Python / TypeScript PTC 工具编排组合成 DSH 预设。提供插件工具和 Windows 终端适配，并保留宿主的计划模式、网页不可信内容与工具使用约束。
+**用极简提示与代码编排，完成多步工具任务。**
 
 [![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc) [![total downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-total-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
-[下载统计说明](https://github.com/STARDUSTLC666/dsh-suite/blob/npm-downloads/README.md)
+**[安装使用](#安装) · [使用流程](#开始使用) · [完整说明](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.zh.md)**
 
-欢迎使用，遇到问题或有改进建议，请提交 [issues](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues) 和 [PR](https://github.com/STARDUSTLC666/dsh-minimal-ptc/pulls)。
+<picture>
+  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/docs/assets/intro/workflow-zh-mobile-dark.svg">
+  <source media="(max-width: 640px)" srcset="https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/docs/assets/intro/workflow-zh-mobile-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/docs/assets/intro/workflow-zh-dark.svg">
+  <img src="https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/docs/assets/intro/workflow-zh-light.svg" alt="用极简提示与代码编排，完成多步工具任务。 · 流程示意" width="100%">
+</picture>
 
 ## 功能
 
-- 以官方 run_code 入口编排多步工具调用。
-- 保留极简人格，按当前工具和执行模式生成官方 SDK 说明。
-- 保留文件、检索、技能、计划、目标和子代理能力。
-- Windows 提供 Git Bash 与官方持久 PowerShell。
+- 在会话模式中选择独立预设。
+- 使用官方 run_code 入口编排 TypeScript / Python 工具调用。
+- 保留宿主执行模式与权限约束，并适配 Windows 终端。
 
 ## 安装
 
-桌面版可在「插件」面板按包名 `dsh-minimal-ptc` 安装。已配置 dsh 命令时也可使用：
+在 DSH 桌面版「插件」面板安装 `dsh-minimal-ptc`。已配置命令行时也可使用：
 
 ```bash
 dsh plugin --profile desktop add dsh-minimal-ptc
 ```
 
-网页版把命令中的 `desktop` 改为 `web`。安装后重启 DSH。
+网页版把 `desktop` 改为 `web`；安装后重启对应的 DSH。宿主要求以包声明 `>=0.2.1-rc.3` 为准。
 
 ## 开始使用
 
@@ -36,25 +38,32 @@ dsh plugin --profile desktop add dsh-minimal-ptc
 3. 描述任务和目标工作区，由助手按预设使用 TypeScript / Python 编排工具；按需要准备对应运行时。
 4. 核对工具结果和实际文件；需要其他能力时切换模式，不必额外安装整套 Suite。
 
-## 依赖与配置
+可以这样说：
 
-使用官方声明式预设接口。Windows 的 Git Bash 需要 Git for Windows；与官方 PTC 的扩展差异见使用说明。
+> 在这个工作区完成任务，先检查可用工具和运行环境，按当前模式的约束执行。
 
-详细配置、工具参数与排错见[使用说明](docs/USAGE.md)。从源码独立开发时，Node 要求以 [package.json](package.json) 为准。
+## 开始前要知道
 
-## 文档
+这是会话预设；相应语言运行时与具体工具依赖仍需可用。
 
-- [使用与排错](docs/USAGE.md)
-- [更新记录](CHANGELOG.md)
-- [验证范围与历史记录](docs/VALIDATION.md)
-- [问题反馈与功能建议](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues)
+配置、完整工具与排错见[详细使用说明](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.zh.md)。
 
 ## 插件更新
 
-需要 DSH 0.2.1-rc.3 或更新版本。更新控件直接位于原有工作台内容末尾；没有工作台的插件，位于原生插件详情页底部。检查、更新记录和偏好在原地展开，不增加独立更新页面或设置菜单。自动检查默认开启；**自动安装默认关闭**，明确授权后才会在空闲且没有未保存修改时安装兼容的稳定补丁。开关按插件独立保存，可关闭、推迟或忽略提醒；不会强制重启 DSH、升级 DSH 本体或替换本地源码安装。Suite 组件在当前页面底部明确说明并操作 Suite 整包更新。
+在工作台或原生插件详情页底部检查更新。默认自动检查，**默认不自动安装**；是否安装、何时重启由你决定。Suite 管理的组件随整包更新。[查看更新规则](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.zh.md)。
 
-旧版用户先在官方插件管理中手动更新一次，之后才会获得此入口。发布到 npm 不会直接替换用户已经安装的版本。
+## 文档
+
+- [详细使用、配置与边界](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.zh.md)
+- [更新记录](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/CHANGELOG.md)
+- [验证范围与历史](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/VALIDATION.md)
+
+## 反馈与贡献
+
+如果插件帮到了你，欢迎 Star，让更多人发现它。问题和建议请提交 [Issues](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues)，也欢迎代码与文档 [PR](https://github.com/STARDUSTLC666/dsh-minimal-ptc/pulls)。反馈时附上版本与复现步骤，并移除凭据。
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/LICENSE)
+
+<a id="依赖与配置"></a>

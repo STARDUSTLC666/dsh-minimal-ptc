@@ -1,33 +1,35 @@
-# dsh-minimal-ptc
+[简体中文](README.md) · **English**
 
-[中文](README.md)
+# Minimal PTC
 
-![dsh-minimal-ptc whale girl plugin cover](https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/assets/cover-whale-girl.png)
-
-Combine the official minimal prompt style with Python/TypeScript PTC orchestration in a DSH preset. Keeps plugin tools and Windows shell support while preserving host guidance for plan mode, untrusted web content and tool use.
+**Use minimal prompting and code orchestration for tool tasks.**
 
 [![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc) [![total downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-total-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
-[Download statistics](https://github.com/STARDUSTLC666/dsh-suite/blob/npm-downloads/README.md)
+**[Install](#install) · [Workflow](#start-using-it) · [Full guide](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.en.md)**
 
-Feedback and contributions are welcome: report [issues](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues) or submit [pull requests](https://github.com/STARDUSTLC666/dsh-minimal-ptc/pulls).
+<picture>
+  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/docs/assets/intro/workflow-en-mobile-dark.svg">
+  <source media="(max-width: 640px)" srcset="https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/docs/assets/intro/workflow-en-mobile-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/docs/assets/intro/workflow-en-dark.svg">
+  <img src="https://raw.githubusercontent.com/STARDUSTLC666/dsh-minimal-ptc/main/docs/assets/intro/workflow-en-light.svg" alt="Use minimal prompting and code orchestration for tool tasks. · workflow illustration" width="100%">
+</picture>
 
-## What it does
+## Features
 
-- Use the official run_code entry for multi-step tool calls.
-- Keep the minimal identity and generate the official SDK for the current tools and runtime mode.
-- Keep files, search, skills, plans, goals and subagent tools.
-- Offer Git Bash and the official persistent PowerShell on Windows.
+- Choose the independent preset in the session mode selector.
+- Orchestrate TypeScript/Python tool calls through official run_code.
+- Keep host execution and permission rules with Windows terminal support.
 
 ## Install
 
-In DSH Desktop, install `dsh-minimal-ptc` from the Plugins panel. If the bundled dsh command is available:
+Open **Plugins** in the DSH desktop app and install `dsh-minimal-ptc`. If the CLI is available:
 
 ```bash
 dsh plugin --profile desktop add dsh-minimal-ptc
 ```
 
-For the web version, replace `desktop` with `web`. Restart DSH after installation.
+For the web profile, replace `desktop` with `web`. Restart that DSH profile after installation. The package’s DSH requirement is `>=0.2.1-rc.3`.
 
 ## Start using it
 
@@ -36,25 +38,33 @@ For the web version, replace `desktop` with `web`. Restart DSH after installatio
 3. Describe the task and workspace; the assistant uses TypeScript/Python tool orchestration. Prepare the selected runtime when needed.
 4. Check tool results and actual files. Switch modes for other capabilities; the full Suite is optional.
 
-## Requirements and configuration
+Example request：
 
-Uses the official declarative preset interface. Git Bash requires Git for Windows. The guide documents extensions beyond the stock PTC preset.
+> Complete the task in this workspace. Check available tools and runtimes first and follow the current mode’s rules.
 
-Detailed configuration, tool arguments and troubleshooting are in the [usage guide](docs/USAGE.en.md). For standalone development, follow the Node requirement in [package.json](package.json).
+## Before you start
 
-## Documentation
+This is a session preset; language runtimes and individual tool dependencies still need to be available.
 
-- [Usage and troubleshooting](docs/USAGE.en.md)
-- [Changelog](CHANGELOG.md)
-- [Validation scope and history](docs/VALIDATION.md)
-- [Report a problem or suggest a feature](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues)
+Configuration, detailed tools and troubleshooting: [full reference](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.en.md).
 
 ## Plugin updates
 
-Requires DSH 0.2.1-rc.3 or newer. Update controls sit at the bottom of the existing workbench, or native plugin details for plugins without a workbench. Checks, release notes and preferences expand in place, with no separate update page or settings menu. Automatic checks are on by default; **automatic installation is off by default**. Only explicit opt-in permits compatible stable patches while idle with no unsaved changes. Preferences are independent, with per-plugin disable, deferral and ignore controls. No forced DSH restart or upgrade, and local-source installations stay unchanged. Suite components explain and operate on the whole Suite in the same footer.
+Check updates at the bottom of the workbench or native plugin details. Automatic checks are on by default; **automatic installation is off**. You choose whether to install and when to restart. Suite-managed components update with their bundle. [Update behavior](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.en.md).
 
-Older releases need one manual update in native plugin management to acquire these controls. Publishing to npm does not replace an existing user installation.
+## Documentation
+
+- [Full usage, configuration and limits](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.en.md)
+- [Release notes](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/CHANGELOG.md)
+- [Validation scope and history](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/VALIDATION.md)
+
+## Feedback and contributions
+
+If the plugin helps, a Star makes it easier for others to discover. Report problems or suggest improvements in [Issues](https://github.com/STARDUSTLC666/dsh-minimal-ptc/issues); code and documentation [PRs](https://github.com/STARDUSTLC666/dsh-minimal-ptc/pulls) are welcome. Include versions and reproduction steps, and remove credentials from reports.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/LICENSE)
+
+<a id="what-it-does"></a>
+<a id="requirements-and-configuration"></a>

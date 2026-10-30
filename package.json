@@ -1,7 +1,7 @@
 {
   "name": "dsh-minimal-ptc",
-  "version": "0.6.6",
-  "description": "DSH 极简 PTC 预设：Python / TypeScript 工具编排、Windows 终端适配与宿主关键约束保留。欢迎提交 issues 和 PR。",
+  "version": "0.6.7",
+  "description": "用极简提示与代码编排，完成多步工具任务。 这是会话预设 欢迎提交 issues 和 PR。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
