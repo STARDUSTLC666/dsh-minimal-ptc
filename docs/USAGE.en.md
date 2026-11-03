@@ -68,6 +68,10 @@ Developers creating their own preset can use the bundled `ptc-minimal.patch.yml`
 
 If the mode is missing, confirm Harness is 0.1.7 or later and restart after installation. Recreating a retired preset directory will not help: the new host does not discover presets there.
 
+To confirm materialization happened: the plugin's host row writes the preset to `$DSH_HOME/.agent-presets/ptc-minimal` (`DSH_HOME` defaults to `~/.dsh`) together with a version marker, `/.dsh-ptc-minimal.version`, and logs `materialized agent preset "ptc-minimal"`. A marker older than the installed plugin version is refreshed on the next restart.
+
+If the directory exists **without** a marker, the plugin treats it as a preset you wrote yourself: it logs one startup warning, leaves the files untouched, and stops refreshing them. To go back to the plugin-managed copy, rename or delete that directory and restart. To keep your own copy, leave it in place and sync changes yourself after upgrades.
+
 If every tool fails with `Cannot read properties of undefined (reading 'prepare')`, check startup logs for duplicate runtime packages. Update the plugin bringing in extra `dsh-tools` / `cordis` copies and reinstall dependencies. Do not remove the entire `@deepseek-ai` directory: public helpers are supported dependencies. If the problem persists, report the host version and startup error in an issue; do not apply an old host source patch to a newer release without checking it.
 
 ## Uninstall

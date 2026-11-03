@@ -14,6 +14,33 @@ function apply() {
   })
 }
 
+test('user-created directory warning names the directory and the way out', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'dsh-minimal-ptc-warn-'))
+  const previous = process.env.DSH_HOME
+  process.env.DSH_HOME = dir
+  const preset = join(dir, '.agent-presets', 'ptc-minimal')
+  const warnings = []
+  try {
+    mkdirSync(preset, { recursive: true })
+    writeFileSync(join(preset, 'agent.cordis.yml'), '# user-created preset')
+    mount({
+      get: () => undefined,
+      logger: { warn: message => warnings.push(message), info() {} },
+      appReady: { onReady(listener) { listener(); return () => {} } },
+      effect: callback => callback(),
+    })
+    const warning = warnings.find(message => message.includes(preset))
+    assert.ok(warning, '跳过用户自建目录时必须点名具体目录')
+    assert.match(warning, /rename or delete/, '只报现象不够，必须给出解除办法')
+    assert.match(warning, /will not follow future plugin updates/, '也要说明保留它的后果')
+    assert.equal(readFileSync(join(preset, 'agent.cordis.yml'), 'utf8'), '# user-created preset')
+  } finally {
+    if (previous === undefined) delete process.env.DSH_HOME
+    else process.env.DSH_HOME = previous
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test('materialization honors version marker and user-created directories', () => {
   const dir = mkdtempSync(join(tmpdir(), 'dsh-minimal-ptc-materialize-'))
   const previous = process.env.DSH_HOME
