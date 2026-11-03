@@ -1,5 +1,10 @@
 # 更新记录
 
+## 0.6.7 (2026-11-03)
+
+- 自建预设目录的警告点名目录并给出两条出路；使用说明补齐物化校验。
+- The unmanaged preset warning names the directory and offers two ways out; docs explain how to verify materialization.
+
 ## 0.6.6 (2026-10-30)
 
 - 原生插件列表与详情新增专门生成的鲸鱼娘图标：大头像、独立功能符号、透明留白，适合 30 / 36 px 显示；原封面保留。
