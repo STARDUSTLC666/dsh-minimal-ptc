@@ -1,9 +1,16 @@
 # 更新记录
 
-## 0.6.7 (2026-11-03)
+## 0.6.8 (2026-11-03)
 
 - 自建预设目录的警告点名目录并给出两条出路；使用说明补齐物化校验。
 - The unmanaged preset warning names the directory and offers two ways out; docs explain how to verify materialization.
+
+## 0.6.7 (2026-10-30)
+
+- 重整中英文首页：用途、三步流程图、安装入口与操作示例；详细配置与边界集中到完整说明。
+- 保留下载统计、独立更新选择、问题反馈和贡献入口；原封面与运行功能保留。
+- Refresh bilingual landing pages, workflow artwork, quick starts and reference navigation.
+
 
 ## 0.6.6 (2026-10-30)
 
