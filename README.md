@@ -67,3 +67,5 @@ dsh plugin --profile desktop add dsh-minimal-ptc
 [MIT](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/LICENSE)
 
 <a id="依赖与配置"></a>
+
+[执行器兼容说明](docs/WORKBENCH.md)：alpha.3 原生 executor 与旧宿主分支。

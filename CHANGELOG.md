@@ -1,5 +1,13 @@
 # 更新记录
 
+## 0.6.9 (2026-11-04)
+
+- 同步共享界面：嵌入设置时继承宿主底色，输入框跟随主题，空状态保持可读宽度；新版 DSH 可显示插件设置图标。
+- Align embedded surfaces, themed inputs, readable empty states and optional native settings icons.
+- 适配 alpha.3 的原生 PTC executor 与子代理发现入口，保留旧宿主兼容分支。
+- Use alpha.3 PTC executor and child discovery APIs with legacy-host branches retained.
+
+
 ## 0.6.8 (2026-11-03)
 
 - 自建预设目录的警告点名目录并给出两条出路；使用说明补齐物化校验。

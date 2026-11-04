@@ -24,3 +24,19 @@ test('现代与兼容预设保留官方定时能力、子代理限制及极简�
     assert.equal(all.some(row => ['agent-instructions','time-context'].includes(row.id)), false)
   }
 })
+
+test('alpha.3 activates one executor and one child-discovery provider without importing removed exports',()=>{
+ const schema=yaml.DEFAULT_SCHEMA.extend([new yaml.Type('tag:yaml.org,2002:js',{kind:'scalar',construct:value=>({expression:value})})]);
+ for(const file of ['../ptc-minimal.patch.yml','../presets/ptc-minimal/agent.cordis.yml']){
+  const doc=yaml.load(readFileSync(new URL(file,import.meta.url),'utf8'),{schema}),rows=file.includes('patch')?doc[0].insert[0].config.plugins:doc;
+  for(const modern of [false,true]){
+   const ctx={get:name=>name==='tools'&&modern?{setExecutor(){}}:undefined};
+   const active=list=>list.flatMap(row=>{const disabled=row.disabled?.expression?new Function('ctx','return ('+row.disabled.expression+')')(ctx):row.disabled===true;return disabled?[]:[row,...(row.group?active(row.config):[])]});
+   const enabled=active(rows);
+   assert.equal(enabled.some(row=>row.name==='@deepseek-ai/dsh-tool-executor-ptc'),modern);
+   assert.equal(enabled.some(row=>row.name==='@deepseek-ai/dsh-agent-tool-presentation'),!modern);
+   assert.equal(enabled.some(row=>row.name==='@deepseek-ai/dsh-tool-subagent-control/list-agents'),!modern);
+   assert.equal(enabled.filter(row=>row.name==='@deepseek-ai/dsh-tool-subagent-control').length,1);
+  }
+ }
+});

@@ -68,3 +68,5 @@ If the plugin helps, a Star makes it easier for others to discover. Report probl
 
 <a id="what-it-does"></a>
 <a id="requirements-and-configuration"></a>
+
+[Executor compatibility](docs/WORKBENCH.md) covers the alpha.3 native executor and legacy-host fallback.
