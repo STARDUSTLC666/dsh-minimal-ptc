@@ -1,5 +1,10 @@
 # 更新记录
 
+## 0.6.10 (2026-11-14)
+
+- 适配 DSH 0.2.2-rc.3：预设的委派配置对齐当前宿主——删除已下线的 `.../list-agents` 行，子代理改用 `modelSelection` / `modelDiscovery`，移除已删除的 `backgroundMode`，并按内置预设关闭 `interrupt_agent`；最低 Harness 声明提升至 0.2.2-rc.3。
+- Support DSH 0.2.2-rc.3: align the preset delegation rows with the current host — drop the retired `.../list-agents` row, use `modelSelection` / `modelDiscovery`, remove the deleted `backgroundMode` key and disable `interrupt_agent` like the built-in presets; raise the minimum Harness declaration to 0.2.2-rc.3.
+
 ## 0.6.9 (2026-11-04)
 
 - 同步共享界面：嵌入设置时继承宿主底色，输入框跟随主题，空状态保持可读宽度；新版 DSH 可显示插件设置图标。

@@ -1,6 +1,6 @@
 {
   "name": "dsh-minimal-ptc",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "DSH 极简 PTC 预设：Python / TypeScript 工具编排、Windows 终端适配与宿主关键约束保留。欢迎提交 issues 和 PR。",
   "type": "module",
   "main": "lib/index.js",
@@ -69,7 +69,7 @@
   "homepage": "https://github.com/STARDUSTLC666/dsh-minimal-ptc#readme",
   "engines": {
     "node": "^22.19.0 || >=24.0.0",
-    "dsh": ">=0.2.1-rc.3"
+    "dsh": ">=0.2.2-rc.3"
   },
   "scripts": {
     "test": "npm run build && node --test",
