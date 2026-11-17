@@ -65,3 +65,33 @@ test('resolveConfig rejects invalid timer values', () => {
   assert.throws(() => resolveConfig({ timeoutMs: 0 }, {}), /positive/)
   assert.throws(() => resolveConfig({ maxTimeoutMs: 999999999999 }, {}), /no greater than/)
 })
+
+test('ctx.effect cleanup terminates lingering background shells on unload', () => {
+  let cleanup
+  let terminated = 0
+  let providedShell
+  const ctx = {
+    get(name) {
+      if (name === 'subprocess') return {
+        spawn: () => ({
+          done: new Promise(() => {}),
+          collected: {
+            stdout: { readFrom: () => ({ text: '', nextOffset: 0, lossy: false }) },
+            stderr: { readFrom: () => ({ text: '', nextOffset: 0, lossy: false }) },
+          },
+          terminate: () => { terminated++ },
+        }),
+      }
+      if (name === 'sandboxPolicy') return { defaultMode: 'danger-full-access', resolve: () => ({ mode: 'danger-full-access' }) }
+      return undefined
+    },
+    effect(fn) { cleanup = fn() },
+    provide(_name, shell) { providedShell = shell },
+  }
+  apply(ctx, { shellPath: process.execPath })
+  const proc = providedShell.start(providedShell.resolve({ command: 'sleep 30' }))
+  assert.equal(proc.status, 'running')
+  cleanup()
+  assert.equal(terminated, 1)
+  assert.equal(proc.status, 'killed')
+})

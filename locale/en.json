@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Minimal PTC",
+    "description": "Minimal prompt preset with full PTC code orchestration, preserving Host SDK guidance and Windows Git Bash + persistent PowerShell support."
+  }
+}

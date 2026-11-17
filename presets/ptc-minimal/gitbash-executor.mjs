@@ -68,17 +68,29 @@ export function toWindowsPath(value) {
  * the GIT_BASH environment variable, the standard install roots, this
  * machine's known install location, then every `bash.exe` found on PATH.
  */
+function isWslBashStub(candidate) {
+  const normalized = candidate.replace(/\//g, '\\').toLowerCase()
+  return normalized.endsWith('\\windows\\system32\\bash.exe')
+    || normalized.endsWith('\\windows\\sysnative\\bash.exe')
+    || normalized.includes('\\microsoft\\windowsapps\\bash.exe')
+}
+
 function shellPathCandidates(env) {
   const candidates = [
     env.GIT_BASH,
     env.ProgramFiles === undefined ? undefined : `${env.ProgramFiles}\\Git\\bin\\bash.exe`,
+    env.ProgramW6432 === undefined ? undefined : `${env.ProgramW6432}\\Git\\bin\\bash.exe`,
     env['ProgramFiles(x86)'] === undefined ? undefined : `${env['ProgramFiles(x86)']}\\Git\\bin\\bash.exe`,
     env.LOCALAPPDATA === undefined ? undefined : `${env.LOCALAPPDATA}\\Programs\\Git\\bin\\bash.exe`,
+    env.USERPROFILE === undefined ? undefined : `${env.USERPROFILE}\\scoop\\apps\\git\\current\\bin\\bash.exe`,
   ]
-  if (typeof env.PATH === 'string' && env.PATH.length > 0) {
-    for (const dir of env.PATH.split(';')) {
+  const rawPath = typeof env.PATH === 'string' ? env.PATH : typeof env.Path === 'string' ? env.Path : ''
+  if (rawPath.length > 0) {
+    for (const rawDir of rawPath.split(';')) {
+      const dir = rawDir.trim().replace(/^"+|"+$/g, '').replace(/[\\/]+$/, '')
       if (dir.length === 0) continue
-      candidates.push(`${dir}\\bash.exe`)
+      const candidate = `${dir}\\bash.exe`
+      if (!isWslBashStub(candidate)) candidates.push(candidate)
     }
   }
   return candidates
@@ -209,6 +221,14 @@ export function apply(ctx, config) {
     }
   }
 
+  const activeProcesses = new Set()
+  if (typeof ctx.effect === 'function') {
+    ctx.effect(() => () => {
+      for (const proc of activeProcesses) proc.kill()
+      activeProcesses.clear()
+    }, 'gitbash-executor.processes()')
+  }
+
   const executor = {
     /** Advertise confinement so the bash tool offers per-call escalation. */
     get sandboxMode() {
@@ -310,7 +330,10 @@ export function apply(ctx, config) {
         }, (error) => {
           proc.status = 'killed'
           spawnFailureNote = spawnError(resolved.shellPath, spec.workdir, error).message
-        }).finally(() => fused.dispose()),
+        }).finally(() => {
+          activeProcesses.delete(proc)
+          fused.dispose()
+        }),
         readOutput: () => {
           const out = collected.stdout.readFrom(stdoutOffset)
           const err = collected.stderr.readFrom(stderrOffset)
@@ -328,10 +351,13 @@ export function apply(ctx, config) {
         kill: () => {
           if (proc.status !== 'running') return false
           proc.status = 'killed'
+          activeProcesses.delete(proc)
+          fused.dispose()
           running.terminate()
           return true
         },
       }
+      activeProcesses.add(proc)
       return proc
     },
   }

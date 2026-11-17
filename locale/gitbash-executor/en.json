@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Git Bash Executor",
+    "description": "Stateless Git-for-Windows Bash shell provider for the Minimal PTC preset on Windows."
+  }
+}

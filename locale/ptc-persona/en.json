@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Minimal PTC Persona",
+    "description": "Applies a minimal assistant identity while preserving Host PTC SDK and plan-mode sections."
+  }
+}

@@ -3,7 +3,7 @@
 export const name = 'ptc-minimal-persona'
 export const inject = ['systemPrompt']
 
-export async function apply(ctx, config = {}) {
+export function apply(ctx, config = {}) {
   const prefix = config.prefix ?? 'You are a helpful software engineer assistant.'
   if (typeof prefix !== 'string') throw new Error('dsh-minimal-ptc: persona prefix must be a string')
   ctx.effect(() => ctx.systemPrompt.section({

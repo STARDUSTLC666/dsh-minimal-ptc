@@ -1,5 +1,10 @@
 # 更新记录
 
+## 0.6.12 (2026-11-18)
+
+- 深度适配 DSH 0.2.2：补齐主包与子模块双语元数据及图标导出；加固异步加载与后台 Git Bash 进程的 `ctx.effect` 生命周期回收，跳过 Windows WSL 占位 `bash.exe` 并修复进程终止后定时器滞留。
+- Deeply adapt to DSH 0.2.2: add bilingual locale metadata and icon exports across entrypoints; harden `ctx.effect` cleanup for async schedule loading and background Git Bash shells, skip Windows WSL stub `bash.exe`, and dispose timeout timers on kill.
+
 ## 0.6.11 (2026-11-17)
 
 - 在原生插件详情页单独检查和安装兼容版本。自动安装默认关闭，可为该插件开启空闲时的稳定补丁更新。

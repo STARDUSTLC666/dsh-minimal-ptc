@@ -1,6 +1,6 @@
 {
   "name": "dsh-minimal-ptc",
-  "version": "0.6.11",
+  "version": "0.6.12",
   "description": "DSH 极简 PTC 预设：Python / TypeScript 工具编排、Windows 终端适配与宿主关键约束保留。欢迎提交 issues 和 PR。",
   "type": "module",
   "main": "lib/index.js",
@@ -14,7 +14,15 @@
     "./schedule-tools": "./presets/ptc-minimal/schedule-tools.mjs",
     "./ptc-persona": "./presets/ptc-minimal/ptc-persona.mjs",
     "./persistent-node.patch.yml": "./presets/ptc-minimal/persistent-node.patch.yml",
-    "./client": "./lib/update-client.js"
+    "./client": "./lib/update-client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./assets/plugin-icon.webp",
+    "./gitbash-executor/locale/*.json": "./locale/gitbash-executor/*.json",
+    "./gitbash-executor/icon": "./assets/plugin-icon.webp",
+    "./schedule-tools/locale/*.json": "./locale/schedule-tools/*.json",
+    "./schedule-tools/icon": "./assets/plugin-icon.webp",
+    "./ptc-persona/locale/*.json": "./locale/ptc-persona/*.json",
+    "./ptc-persona/icon": "./assets/plugin-icon.webp"
   },
   "files": [
     "lib",
@@ -26,9 +34,11 @@
     "ptc-minimal.patch.yml",
     "docs",
     "CHANGELOG.md",
-    "assets/plugin-icon.webp"
+    "assets/plugin-icon.webp",
+    "locale"
   ],
   "dsh": {
+    "manifestVersion": 1,
     "bundle": {
       "patch": [
         "./cordis.patch.yml",

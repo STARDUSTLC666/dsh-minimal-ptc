@@ -36,3 +36,15 @@ test('an available service with a broken official module is not silently ignored
   await assert.rejects(fixture.activate(fixture.scoped), /module unavailable/)
   assert.deepEqual(fixture.plugins, [])
 })
+
+test('unloading scheduleCtx while import is in flight skips plugin mount cleanly', async () => {
+  const fixture = host()
+  let disposeEffect
+  fixture.scoped.effect = (fn) => { disposeEffect = fn() }
+  fixture.scoped.loader.import = async () => {
+    disposeEffect?.()
+    return { default: fixture.official }
+  }
+  await fixture.activate(fixture.scoped)
+  assert.deepEqual(fixture.plugins, [])
+})

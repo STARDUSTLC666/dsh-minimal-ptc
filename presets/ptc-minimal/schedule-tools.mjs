@@ -6,7 +6,12 @@ export const inject = ['tools']
 
 export function apply(ctx) {
   ctx.inject(['schedule'], async (scheduleCtx) => {
+    let active = true
+    scheduleCtx.effect?.(() => () => {
+      active = false
+    })
     const exports = await scheduleCtx.loader.import('@deepseek-ai/dsh-tool-schedule')
+    if (!active || scheduleCtx.fiber?.uid === null) return
     scheduleCtx.plugin(scheduleCtx.loader.unwrapExports(exports))
   })
 }

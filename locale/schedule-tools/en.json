@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Schedule Tools Bridge",
+    "description": "Lazily mounts the official DSH schedule tools once the Host schedule service is active."
+  }
+}
