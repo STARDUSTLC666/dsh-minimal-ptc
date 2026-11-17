@@ -1,5 +1,10 @@
 # 更新记录
 
+## 0.6.13 (2026-11-18)
+
+- 同步 `@stardustlc/dsh-updates` 0.2.1：恢复 Suite 整包统一更新（移除独立拆包迁移），保留整包与独立插件的原地热更新与失败自动回滚。
+- Sync `@stardustlc/dsh-updates` 0.2.1: restore unified Suite bundle updates (removing standalone conversion) while retaining in-place hot reload and automatic rollback.
+
 ## 0.6.12 (2026-11-18)
 
 - 深度适配 DSH 0.2.2：补齐主包与子模块双语元数据及图标导出；加固异步加载与后台 Git Bash 进程的 `ctx.effect` 生命周期回收，跳过 Windows WSL 占位 `bash.exe` 并修复进程终止后定时器滞留。
