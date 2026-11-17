@@ -1,5 +1,10 @@
 # 更新记录
 
+## 0.6.11 (2026-11-17)
+
+- 在原生插件详情页单独检查和安装兼容版本。自动安装默认关闭，可为该插件开启空闲时的稳定补丁更新。
+- Check and install compatible versions separately from the native plugin details. Automatic installation is off by default. Enable it for this plugin to apply stable patches while idle.
+
 ## 0.6.10 (2026-11-14)
 
 - 适配 DSH 0.2.2-rc.3：预设的委派配置对齐当前宿主——删除已下线的 `.../list-agents` 行，子代理改用 `modelSelection` / `modelDiscovery`，移除已删除的 `backgroundMode`，并按内置预设关闭 `interrupt_agent`；最低 Harness 声明提升至 0.2.2-rc.3。
