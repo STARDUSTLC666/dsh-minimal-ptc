@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Minimal PTC",
-    "description": "Minimal prompt preset with full PTC code orchestration, preserving Host SDK guidance and Windows Git Bash + persistent PowerShell support."
+    "description": "Minimal prompt preset with PTC code orchestration for DeepSeek Harness, preserving host safety constraints and Windows Git Bash / PowerShell support."
   }
 }

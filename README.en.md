@@ -4,6 +4,8 @@
 
 **Use minimal prompting and code orchestration for tool tasks.**
 
+Minimal PTC preset plugin for DeepSeek Harness (`>=0.2.2-rc.3`): pairs a concise prompt with Python/TypeScript tool code orchestration, preserves host safety and subagent constraints, and adapts Windows Git Bash and persistent PowerShell.
+
 [![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc) [![total downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-total-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
 **[Install](#install) · [Workflow](#start-using-it) · [Full guide](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.en.md)**

@@ -4,6 +4,8 @@
 
 **用极简提示与代码编排，完成多步工具任务。**
 
+DeepSeek Harness（`>=0.2.2-rc.3`）极简 PTC 预设插件：提供精简系统提示词与 Python / TypeScript 工具代码编排，完整保留宿主安全与子代理约束，原生适配 Windows Git Bash 与持久 PowerShell。
+
 [![npm](https://img.shields.io/npm/v/dsh-minimal-ptc)](https://www.npmjs.com/package/dsh-minimal-ptc) [![downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc) [![total downloads](https://raw.githubusercontent.com/STARDUSTLC666/dsh-suite/npm-downloads/assets/dsh-minimal-ptc-total-downloads.svg)](https://www.npmjs.com/package/dsh-minimal-ptc)
 
 **[安装使用](#安装) · [使用流程](#开始使用) · [完整说明](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.zh.md)**
