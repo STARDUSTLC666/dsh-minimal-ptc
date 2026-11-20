@@ -95,3 +95,29 @@ test('ctx.effect cleanup terminates lingering background shells on unload', () =
   assert.equal(terminated, 1)
   assert.equal(proc.status, 'killed')
 })
+
+test('unload owns foreground shells too and prevents stale executor calls from spawning', async () => {
+  let cleanup, shell, finish, terminated = 0, spawned = 0
+  const ctx = {
+    get(name) {
+      if (name === 'subprocess') return { spawn() {
+        spawned++
+        return { done: new Promise(resolve => { finish = resolve }), collected: {
+          stdout: { readFrom: () => ({ text: '', lossy: false }) }, stderr: { readFrom: () => ({ text: '', lossy: false }) },
+        }, terminate() { terminated++; finish({ exitCode: null, signal: 'SIGTERM' }) } }
+      } }
+      if (name === 'sandboxPolicy') return { resolve: () => ({ mode: 'danger-full-access' }) }
+    },
+    effect(fn) { cleanup = fn() }, provide(_name, executor) { shell = executor },
+  }
+  apply(ctx, { shellPath: process.execPath })
+  const spec = shell.resolve({ command: 'sleep 30' }), running = shell.run(spec)
+  cleanup()
+  // Complete the fixture even on an unpatched executor to avoid a dangling timer.
+  if (!terminated) finish({ exitCode: 0, signal: null })
+  await running
+  assert.equal(terminated, 1, 'unload must stop an active foreground process')
+  await assert.rejects(shell.run(spec), /unload|disposed/i)
+  assert.throws(() => shell.start(spec), /unload|disposed/i)
+  assert.equal(spawned, 1)
+})

@@ -222,8 +222,10 @@ export function apply(ctx, config) {
   }
 
   const activeProcesses = new Set()
+  let disposed = false
   if (typeof ctx.effect === 'function') {
     ctx.effect(() => () => {
+      disposed = true
       for (const proc of activeProcesses) proc.kill()
       activeProcesses.clear()
     }, 'gitbash-executor.processes()')
@@ -258,14 +260,26 @@ export function apply(ctx, config) {
     },
 
     async run(spec) {
+      if (disposed) throw new Error(`${name}: executor is disposed after unload`)
       const mode = spec.sandboxPolicy?.mode
       // `undefined` means the deployment carries no sandbox policy at all.
       if (mode !== undefined && mode !== 'danger-full-access') {
         throw new Error(gateMessage(mode))
       }
       const fused = timeoutSignal(spec.signal, spec.timeoutMs)
+      let owner
+      let stopped = false
       try {
+        fused.signal.throwIfAborted()
         const handle = spawnShell(spec, spec.stdoutMaxBytes, fused.signal)
+        owner = { kill: () => {
+          if (stopped) return false
+          stopped = true
+          fused.dispose()
+          handle.terminate()
+          return true
+        } }
+        activeProcesses.add(owner)
         let outcome
         try {
           outcome = await handle.done
@@ -275,7 +289,7 @@ export function apply(ctx, config) {
         const stdout = finalOutput(handle.collected.stdout)
         const stderr = finalOutput(handle.collected.stderr)
         const timedOut = fused.timedOut()
-        const aborted = spec.signal !== undefined && spec.signal.aborted && !timedOut
+        const aborted = stopped || (spec.signal !== undefined && spec.signal.aborted && !timedOut)
         return {
           ...outcome,
           timedOut,
@@ -286,11 +300,13 @@ export function apply(ctx, config) {
           ...mode === undefined ? {} : { sandbox: { mode, denied: false } },
         }
       } finally {
+        if (owner) activeProcesses.delete(owner)
         fused.dispose()
       }
     },
 
     start(spec) {
+      if (disposed) throw new Error(`${name}: executor is disposed after unload`)
       const mode = spec.sandboxPolicy?.mode
       if (mode !== undefined && mode !== 'danger-full-access') {
         throw new Error(gateMessage(mode))
@@ -298,6 +314,7 @@ export function apply(ctx, config) {
       const fused = timeoutSignal(spec.signal, spec.timeoutMs)
       let running
       try {
+        fused.signal.throwIfAborted()
         running = spawnShell(spec, resolved.maxOutputBytes, fused.signal)
       } catch (error) {
         fused.dispose()

@@ -1,6 +1,6 @@
 {
   "name": "dsh-minimal-ptc",
-  "version": "0.6.20",
+  "version": "0.6.21",
   "description": "DeepSeek Harness 极简 PTC 预设插件：Python / TypeScript 工具编排、Windows Git Bash 适配与宿主约束保留。欢迎提交 issues 和 PR。",
   "type": "module",
   "main": "lib/index.js",
@@ -89,7 +89,7 @@
     "js-yaml": "4.1.1"
   },
   "dependencies": {
-    "@stardustlc/dsh-updates": "0.2.9"
+    "@stardustlc/dsh-updates": "0.2.10"
   },
   "icon": "./assets/plugin-icon.webp"
 }
