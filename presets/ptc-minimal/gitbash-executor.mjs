@@ -144,9 +144,9 @@ export function resolveConfig(config, env = process.env) {
 }
 
 /** Fuse upstream cancellation with an identifiable timeout. */
-function timeoutSignal(upstream, timeoutMs) {
+function timeoutSignal(upstream, timeoutMs, onExpiry = 'kill') {
   const timer = new AbortController()
-  const id = setTimeout(() => {
+  const id = onExpiry === 'none' ? undefined : setTimeout(() => {
     timer.abort(new Error('BASH_TIMEOUT'))
   }, timeoutMs)
   const signal = upstream === undefined
@@ -154,7 +154,7 @@ function timeoutSignal(upstream, timeoutMs) {
     : AbortSignal.any([upstream, timer.signal])
   return {
     signal,
-    timedOut: () => timer.signal.aborted,
+    timedOut: () => timer.signal.aborted && signal.reason === timer.signal.reason,
     dispose: () => clearTimeout(id),
   }
 }
@@ -224,10 +224,11 @@ export function apply(ctx, config) {
   const activeProcesses = new Set()
   let disposed = false
   if (typeof ctx.effect === 'function') {
-    ctx.effect(() => () => {
+    ctx.effect(() => async () => {
       disposed = true
-      for (const proc of activeProcesses) proc.kill()
-      activeProcesses.clear()
+      const pending = [...activeProcesses]
+      for (const proc of pending) proc.kill()
+      await Promise.all(pending.map(proc => proc.done))
     }, 'gitbash-executor.processes()')
   }
 
@@ -246,10 +247,13 @@ export function apply(ctx, config) {
       if (!Number.isFinite(stdoutMaxBytes) || stdoutMaxBytes <= 0) {
         throw new Error(`${name}: request.stdoutMaxBytes must be a positive finite number`)
       }
+      const onExpiry = request.onExpiry ?? 'kill'
+      if (onExpiry !== 'kill' && onExpiry !== 'none') throw new Error(`${name}: request.onExpiry must be kill or none`)
       return {
         command: request.command,
         workdir: toWindowsPath(request.workdir ?? resolved.cwd ?? process.cwd()),
         timeoutMs,
+        onExpiry,
         stdoutMaxBytes,
         ...request.signal === undefined ? {} : { signal: request.signal },
         ...request.stdin === undefined ? {} : { stdin: request.stdin },
@@ -260,49 +264,13 @@ export function apply(ctx, config) {
     },
 
     async run(spec) {
-      if (disposed) throw new Error(`${name}: executor is disposed after unload`)
-      const mode = spec.sandboxPolicy?.mode
-      // `undefined` means the deployment carries no sandbox policy at all.
-      if (mode !== undefined && mode !== 'danger-full-access') {
-        throw new Error(gateMessage(mode))
-      }
-      const fused = timeoutSignal(spec.signal, spec.timeoutMs)
-      let owner
-      let stopped = false
-      try {
-        fused.signal.throwIfAborted()
-        const handle = spawnShell(spec, spec.stdoutMaxBytes, fused.signal)
-        owner = { kill: () => {
-          if (stopped) return false
-          stopped = true
-          fused.dispose()
-          handle.terminate()
-          return true
-        } }
-        activeProcesses.add(owner)
-        let outcome
-        try {
-          outcome = await handle.done
-        } catch (error) {
-          throw spawnError(resolved.shellPath, spec.workdir, error)
-        }
-        const stdout = finalOutput(handle.collected.stdout)
-        const stderr = finalOutput(handle.collected.stderr)
-        const timedOut = fused.timedOut()
-        const aborted = stopped || (spec.signal !== undefined && spec.signal.aborted && !timedOut)
-        return {
-          ...outcome,
-          timedOut,
-          aborted,
-          timeoutMs: spec.timeoutMs,
-          stdout,
-          stderr,
-          ...mode === undefined ? {} : { sandbox: { mode, denied: false } },
-        }
-      } finally {
-        if (owner) activeProcesses.delete(owner)
-        fused.dispose()
-      }
+      return (await executor.execute(spec)).result()
+    },
+
+    // Current hosts use one handle for foreground results and background jobs.
+    // Keep run/start for older hosts, backed by the same owned process.
+    async execute(spec) {
+      return executor.start(spec)
     },
 
     start(spec) {
@@ -311,11 +279,11 @@ export function apply(ctx, config) {
       if (mode !== undefined && mode !== 'danger-full-access') {
         throw new Error(gateMessage(mode))
       }
-      const fused = timeoutSignal(spec.signal, spec.timeoutMs)
+      const fused = timeoutSignal(spec.signal, spec.timeoutMs, spec.onExpiry)
       let running
       try {
         fused.signal.throwIfAborted()
-        running = spawnShell(spec, resolved.maxOutputBytes, fused.signal)
+        running = spawnShell(spec, spec.stdoutMaxBytes ?? resolved.maxOutputBytes, fused.signal)
       } catch (error) {
         fused.dispose()
         throw error
@@ -325,6 +293,7 @@ export function apply(ctx, config) {
         stderr: running.collected.stderr,
       }
       let spawnFailureNote
+      let failure, settledResult, resultPromise, stopped = false
       const consumeSpawnFailure = () => {
         const note = spawnFailureNote ?? ''
         spawnFailureNote = undefined
@@ -344,12 +313,28 @@ export function apply(ctx, config) {
           }
           proc.exitCode = outcome.exitCode
           proc.signal = outcome.signal
+          const timedOut = fused.timedOut()
+          settledResult = { ...outcome, timedOut, aborted: !timedOut && (stopped || fused.signal.aborted), timeoutMs: spec.timeoutMs,
+            stdout: finalOutput(collected.stdout), stderr: finalOutput(collected.stderr),
+            ...mode === undefined ? {} : { sandbox: { mode, denied: false } } }
         }, (error) => {
           proc.status = 'killed'
-          spawnFailureNote = spawnError(resolved.shellPath, spec.workdir, error).message
+          failure = spawnError(resolved.shellPath, spec.workdir, error)
+          spawnFailureNote = failure.message
         }).finally(() => {
           activeProcesses.delete(proc)
           fused.dispose()
+        }),
+        observed: {
+          stdout: collected.stdout,
+          stderr: { readFrom(offset = 0) {
+            if (!failure) return collected.stderr.readFrom(offset)
+            return { text: failure.message.slice(offset), nextOffset: failure.message.length, lossy: false }
+          } },
+        },
+        result: () => resultPromise ??= proc.done.then(() => {
+          if (failure) throw failure
+          return settledResult
         }),
         readOutput: () => {
           const out = collected.stdout.readFrom(stdoutOffset)
@@ -367,8 +352,8 @@ export function apply(ctx, config) {
         },
         kill: () => {
           if (proc.status !== 'running') return false
+          stopped = true
           proc.status = 'killed'
-          activeProcesses.delete(proc)
           fused.dispose()
           running.terminate()
           return true
