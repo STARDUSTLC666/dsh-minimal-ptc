@@ -30,8 +30,8 @@ The following extensions make its defaults differ from the stock PTC preset:
 
 - The minimal prompt does not automatically include project AGENTS.md. Rules written by Dream therefore do not automatically enter this mode's context.
 - Windows adds Git Bash and the official persistent PowerShell, while disabling the one-shot PowerShell entry.
-- Ralph and workflow tools are enabled; the official PTC preset disables both by default.
-- Codex, Claude, plugin management and generic `tool-workflow` remain disabled, matching their official defaults.
+- Ralph (`tool-ralph`) and its underlying `workflow-ptc` engine are enabled; the official PTC preset disables `tool-ralph` by default.
+- Codex, Claude, plugin management, and generic `tool-workflow` (`disabled: true`) remain disabled, matching their official defaults.
 
 The host provides tool implementations. The plugin does not bundle a second core runtime or override host approval policy. See [validation records](VALIDATION.md) for the scope of the comparison.
 
@@ -66,11 +66,9 @@ Developers creating their own preset can use the bundled `ptc-minimal.patch.yml`
 
 ## Troubleshooting
 
-If the mode is missing, confirm Harness is 0.1.7 or later and restart after installation. Recreating a retired preset directory will not help: the new host does not discover presets there.
+If the mode is missing, confirm Harness is 0.2.2-rc.3 or later and restart after installation. Recreating a retired preset directory will not help: modern hosts (which provide `agentPresets.register`) register presets declaratively and neither discover nor materialize that directory.
 
-To confirm materialization happened: the plugin's host row writes the preset to `$DSH_HOME/.agent-presets/ptc-minimal` (`DSH_HOME` defaults to `~/.dsh`) together with a version marker, `/.dsh-ptc-minimal.version`, and logs `materialized agent preset "ptc-minimal"`. A marker older than the installed plugin version is refreshed on the next restart.
-
-If the directory exists **without** a marker, the plugin treats it as a preset you wrote yourself: it logs one startup warning, leaves the files untouched, and stops refreshing them. To go back to the plugin-managed copy, rename or delete that directory and restart. To keep your own copy, leave it in place and sync changes yourself after upgrades.
+Legacy-host fallback note (hosts without `agentPresets.register` only): only on legacy hosts lacking declarative preset registration does the plugin materialize the preset to `$DSH_HOME/.agent-presets/ptc-minimal` (`DSH_HOME` defaults to `~/.dsh`) with version marker `/.dsh-ptc-minimal.version` and log `materialized agent preset "ptc-minimal"` (an older marker refreshes on restart; an existing directory without a marker is treated as user-owned and left untouched unless renamed or deleted). On DSH `>=0.2.2-rc.3`, this materialization step is skipped automatically.
 
 If every tool fails with `Cannot read properties of undefined (reading 'prepare')`, check startup logs for duplicate runtime packages. Update the plugin bringing in extra `dsh-tools` / `cordis` copies and reinstall dependencies. Do not remove the entire `@deepseek-ai` directory: public helpers are supported dependencies. If the problem persists, report the host version and startup error in an issue; do not apply an old host source patch to a newer release without checking it.
 

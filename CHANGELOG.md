@@ -1,5 +1,11 @@
 # 更新记录
 
+## 0.6.23 (2026-11-23)
+
+- 修正 `docs/USAGE` 中关于 `workflow-ptc` 引擎与通用 `tool-workflow` 关闭状态，以及旧宿主目录物化（DSH `>=0.2.2-rc.3` 跳过）的两处表述矛盾。
+- 移除 `README` 中不存在的工作台更新入口描述（改为原生插件详情页底部），并修正 `docs/REFERENCE` 语言链接与兼容更新策略文案。
+- Resolve contradictions in bilingual `USAGE` docs (`workflow-ptc` engine vs disabled `tool-workflow`; legacy-only preset directory materialization), remove nonexistent workbench wording in `README`, and fix `REFERENCE` links and update wording.
+
 ## 0.6.22 (2026-11-20)
 
 - 兼容当前官方 Harness ShellExecutor.execute 及可观察任务句柄，恢复 run_code 嵌套 bash 调用；保留旧 run/start 入口与取消、卸载清理。

@@ -54,7 +54,7 @@ dsh plugin --profile desktop add dsh-minimal-ptc
 
 ## 插件更新
 
-在工作台或原生插件详情页底部检查更新。默认自动检查，**默认不自动安装**；是否安装、何时重启由你决定。Suite 管理的组件随整包更新。[查看更新规则](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.zh.md)。
+在原生插件详情页底部检查更新。默认自动检查，**默认不自动安装**；是否安装、何时重启由你决定。Suite 管理的组件随整包更新。[查看更新规则](https://github.com/STARDUSTLC666/dsh-minimal-ptc/blob/main/docs/REFERENCE.zh.md)。
 
 ## 文档与反馈
 

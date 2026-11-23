@@ -32,8 +32,8 @@ SDK 大小随启用的工具数量增长，因此会比纯粹一句话的 Minima
 
 - 使用极简提示词，不自动注入项目 AGENTS.md。Dream 写入的项目规则也不会因此自动进入这个模式的上下文。
 - Windows 增加 Git Bash 和官方持久 PowerShell；停用官方一次性 PowerShell 入口。
-- 启用 Ralph 与 workflow 工具；官方 PTC 默认关闭这两项。
-- Codex、Claude、插件管理与通用 `tool-workflow` 的默认开关仍与官方一致，保持关闭。
+- 启用 Ralph（`tool-ralph`）及其所需的底层 `workflow-ptc` 引擎；官方 PTC 默认关闭 `tool-ralph`。
+- Codex、Claude、插件管理与通用 `tool-workflow`（`disabled: true`）的默认开关仍与官方一致，保持关闭。
 
 工具实现由宿主提供，插件不捆绑另一份核心运行时，也不覆盖宿主审批规则。核对范围见[验证记录](VALIDATION.md)。
 
@@ -68,11 +68,9 @@ DSH 0.2.1-alpha.3 起，官方 Node 执行器可在同一 Agent 的多次 `run_c
 
 ## 排错
 
-模式未出现时，先确认 DSH 为 0.1.7 及以上且安装后已重启。不要通过重建旧预设目录解决，新宿主不再从该目录发现预设。
+模式未出现时，先确认 DSH 为 0.2.2-rc.3 及以上且安装后已重启。不要通过重建旧预设目录解决：现代宿主（具备 `agentPresets.register`）直接通过声明式预设接口加载，不会从该目录发现预设，也不会创建该目录。
 
-确认物化是否发生过：插件宿主行在启动时把预设写到 `$DSH_HOME/.agent-presets/ptc-minimal`，随文件写入版本标记 `/.dsh-ptc-minimal.version`，启动日志里对应一行 `materialized agent preset "ptc-minimal"`。标记版本低于插件版本时，重启会用插件自带文件刷新。
-
-目录已存在但**没有**版本标记时，插件视为你自己写的预设：只打一条启动警告，原样保留、不覆盖，也不会跟随插件更新。想恢复成随插件更新的版本，改名或删除该目录后重启；想继续用自己那份，保持不动即可，但升级后要自己同步差异。
+仅旧版宿主（无 `agentPresets.register` 的历史环境）回退说明：只有在不支持声明式预设注册的旧宿主上，插件宿主行才会在启动时把预设物化到 `$DSH_HOME/.agent-presets/ptc-minimal`，并写入版本标记 `/.dsh-ptc-minimal.version`、在启动日志中记录 `materialized agent preset "ptc-minimal"`（标记版本低于插件版本时重启会自动刷新；目录已存在但无版本标记时视为用户自写预设，仅打警告且原样保留，需改名或删除该目录后重启才会恢复托管）。在 DSH `>=0.2.2-rc.3` 宿主上该物化流程自动跳过。
 
 若每个工具都报 `Cannot read properties of undefined (reading 'prepare')`，查看启动日志中的核心包冲突提示。应升级带入额外 `dsh-tools` / `cordis` 副本的插件并重新安装依赖；不要删除整个 `@deepseek-ai` 目录，官方的公共辅助包属于正常依赖。仍有问题时，记录宿主版本和启动错误，提交 issue；旧宿主的源码修补不应直接套用到新版本。
 
