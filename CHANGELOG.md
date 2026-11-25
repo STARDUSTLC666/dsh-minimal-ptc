@@ -1,5 +1,11 @@
 # 更新记录
 
+## 0.6.24 (2026-11-25)
+
+- 启动执行器前校验 stdoutMaxBytes 必须为 1 到 4 MiB 的整数。
+- Limit stdoutMaxBytes to an integer from 1 to 4 MiB before spawning the executor.
+
+
 ## 0.6.23 (2026-11-23)
 
 - 修正 `docs/USAGE` 中关于 `workflow-ptc` 引擎与通用 `tool-workflow` 关闭状态，以及旧宿主目录物化（DSH `>=0.2.2-rc.3` 跳过）的两处表述矛盾。

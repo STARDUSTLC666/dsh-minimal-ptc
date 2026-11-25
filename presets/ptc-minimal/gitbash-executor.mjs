@@ -34,6 +34,7 @@ export const inject = ['subprocess', 'sandboxPolicy']
 
 /** Node's maximum timer delay before setTimeout clamps to 1ms. */
 const MAX_TIMER_DELAY_MS = 2147483647
+const MAX_STDOUT_MAX_BYTES = 4 * 1024 * 1024
 
 const ENV_OVERRIDES = {
   NO_COLOR: '1',
@@ -244,8 +245,8 @@ export function apply(ctx, config) {
         throw new Error(`${name}: request.timeoutMs must be a positive finite number`)
       }
       const stdoutMaxBytes = request.stdoutMaxBytes ?? resolved.maxOutputBytes
-      if (!Number.isFinite(stdoutMaxBytes) || stdoutMaxBytes <= 0) {
-        throw new Error(`${name}: request.stdoutMaxBytes must be a positive finite number`)
+      if (!Number.isSafeInteger(stdoutMaxBytes) || stdoutMaxBytes <= 0 || stdoutMaxBytes > MAX_STDOUT_MAX_BYTES) {
+        throw new Error(`${name}: request.stdoutMaxBytes must be an integer between 1 and ${MAX_STDOUT_MAX_BYTES}`)
       }
       const onExpiry = request.onExpiry ?? 'kill'
       if (onExpiry !== 'kill' && onExpiry !== 'none') throw new Error(`${name}: request.onExpiry must be kill or none`)

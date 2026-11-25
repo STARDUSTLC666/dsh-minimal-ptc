@@ -28,6 +28,19 @@ test('modern execute publishes one observable handle and memoizes its foreground
  assert.equal((await result).timedOut,false);assert.equal((await result).aborted,false)
 })
 
+test('stdout capture accepts its 4 MiB ceiling and rejects larger or fractional requests before spawn',async()=>{
+ const f=fixture(),spec=f.shell.resolve({command:'fixture',stdoutMaxBytes:4*1024*1024,onExpiry:'none'})
+ const proc=f.shell.start(spec)
+ assert.equal(f.captured.stdio.stdout.maxBytes,4*1024*1024)
+ proc.kill();await proc.done
+
+ const rejected=fixture()
+ for(const stdoutMaxBytes of [4*1024*1024+1,1.5,Number.MAX_SAFE_INTEGER+1]) {
+  assert.throws(()=>rejected.shell.resolve({command:'fixture',stdoutMaxBytes}),/integer between 1 and 4194304/)
+  assert.equal(rejected.captured,undefined)
+ }
+})
+
 test('modern execution distinguishes caller cancellation from a later elapsed timeout',async()=>{
  const f=fixture(),controller=new AbortController(),reason=new Error('caller owns cancellation')
  const proc=await f.shell.execute(f.shell.resolve({command:'fixture',signal:controller.signal,timeoutMs:20}))
