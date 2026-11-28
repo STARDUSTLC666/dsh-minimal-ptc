@@ -1,5 +1,10 @@
 # 更新记录
 
+## 0.6.25 (2026-11-28)
+
+- 更新详情页现在会保留较新检查的结果，慢轮询返回时不再把版本或任务状态退回旧值。
+- Keep newer update-check results and job status when an older background request finishes later.
+
 ## 0.6.24 (2026-11-25)
 
 - 启动执行器前校验 stdoutMaxBytes 必须为 1 到 4 MiB 的整数。
